@@ -1,0 +1,41 @@
+# OS / filesystem
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editor / IDE
+.vscode/
+.idea/
+*.iml
+
+# Node/tooling leftovers (if used later)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build / packaging outputs
+dist/
+build/
+out/
+tmp/
+temp/
+artifacts/
+release/
+*.zip
+*.xpi
+*.crx
+
+# Test / coverage
+coverage/
+.nyc_output/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Local caches
+.cache/
+.eslintcache
