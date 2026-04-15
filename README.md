@@ -14,11 +14,7 @@ This repository contains two extension variants:
 build-firefox.bat
 ```
 
-3. Or package the contents of the `firefox` folder manually (without an extra parent directory):
-
-```powershell
-Compress-Archive -Path .\firefox\* -DestinationPath .\allegro-classic-view-firefox.zip -Force
-```
+3. Or package the contents of the `firefox` folder manually into zip (without an extra parent directory):
 
 4. Rename the file extension to `.xpi` (optional for local usage).  
 In AMO, you can also upload ZIP and Mozilla will sign the add-on.
@@ -32,8 +28,4 @@ In AMO, you can also upload ZIP and Mozilla will sign the add-on.
 build-chrome.bat
 ```
 
-3. Or package the contents of the `chrome` folder manually (without an extra parent directory):
-
-```powershell
-Compress-Archive -Path .\chrome\* -DestinationPath .\allegro-classic-view-chrome.zip -Force
-```
+3. Or package the contents of the `chrome` folder manually into zip (without an extra parent directory)
