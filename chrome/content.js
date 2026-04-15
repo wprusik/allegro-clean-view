@@ -230,19 +230,9 @@ function removeContainersByTitles(titles) {
 }
 
 function removeCommercialContainers() {
-    findElementByTitle("Opinie o produkcie")
-        ?.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.remove();
-    removeContainersByTitles([
-        "Opinie o produkcie",
-        "Inni klienci ogl\\u0105dali r\\u00f3wnie\\u017c",
-        "Zbuduj sw\\u00f3j zestaw",
-        "Propozycje z gwarancj\\u0105 najni\\u017cszej ceny",
-        "Co powiesz na...?",
-        "Zam\\u00f3w zestaw w jednej przesy\\u0142ce",
-        "Zam\\u00f3w w jednej przesy\\u0142ce"
-    ]);
-    document.querySelectorAll('div[data-box-name="template-with-offers"]')
-        .forEach((el) => el.remove());
+    findElementByTitle('Opinie o produkcie')?.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.remove()
+    removeContainersByTitles(['Opinie o produkcie', 'Inni klienci oglądali również', 'Zbuduj swój zestaw', 'Propozycje z gwarancją najniższej ceny', 'Co powiesz na...?', 'Zamów zestaw w jednej przesyłce', 'Zamów w jednej przesyłce', 'Nowości'])
+    document.querySelectorAll('div[data-box-name="template-with-offers"]').forEach(el => el.remove())
 }
 
 async function restoreOldLook() {
