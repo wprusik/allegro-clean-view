@@ -4,7 +4,8 @@ setlocal
 REM Working directory (folder of this script)
 set "WORK_DIR=%~dp0"
 set "SOURCE_DIR=%WORK_DIR%firefox"
-set "OUTPUT_FILE=%WORK_DIR%allegro-classic-view-firefox.xpi"
+set "TARGET_DIR=%WORK_DIR%target"
+set "OUTPUT_FILE=%TARGET_DIR%\allegro-classic-view-firefox.xpi"
 
 REM Locate 7-Zip
 set "SEVEN_ZIP=%ProgramFiles%\7-Zip\7z.exe"
@@ -18,6 +19,10 @@ if not exist "%SEVEN_ZIP%" (
 if not exist "%SOURCE_DIR%\manifest.json" (
     echo ERROR: Missing source folder or manifest: "%SOURCE_DIR%"
     exit /b 1
+)
+
+if not exist "%TARGET_DIR%" (
+    mkdir "%TARGET_DIR%"
 )
 
 REM Remove old package

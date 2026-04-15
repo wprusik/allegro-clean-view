@@ -23,6 +23,7 @@ tmp/
 temp/
 artifacts/
 release/
+target/
 *.zip
 *.xpi
 *.crx

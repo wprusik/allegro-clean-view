@@ -1,58 +1,39 @@
-# allegro-classic-view
+﻿# allegro-classic-view
 
-Repo zawiera dwa warianty rozszerzenia:
+This repository contains two extension variants:
 
-- `firefox/` - wersja do Mozilla Firefox
-- `chrome/` - wersja do Google Chrome
+- `firefox/` - Firefox version
+- `chrome/` - Chrome version
 
-Obie wersje uruchamiaja skrypt tylko na URL:
+## Packaging - Firefox
 
-- `https://allegro.pl/produkt/*`
+1. Go to the project directory.
+2. Run the script:
 
-## Struktura
+```bat
+build-firefox.bat
+```
 
-- `firefox/manifest.json`
-- `firefox/content.js`
-- `chrome/manifest.json`
-- `chrome/content.js`
-
-## Pakowanie - Firefox
-
-1. Przejdz do katalogu projektu.
-2. Spakuj zawartosc folderu `firefox` do archiwum ZIP (bez dodatkowego katalogu nadrzednego):
+3. Or package the contents of the `firefox` folder manually (without an extra parent directory):
 
 ```powershell
 Compress-Archive -Path .\firefox\* -DestinationPath .\allegro-classic-view-firefox.zip -Force
 ```
 
-3. Zmien rozszerzenie pliku na `.xpi` (opcjonalnie lokalnie).  
-W AMO mozesz wrzucic tez ZIP, a Mozilla podpisze dodatek.
+4. Rename the file extension to `.xpi` (optional for local usage).  
+In AMO, you can also upload ZIP and Mozilla will sign the add-on.
 
-## Podpisanie i wydanie - Firefox (AMO)
+## Packaging - Chrome
 
-1. Wejdz do Firefox Add-ons Developer Hub: `https://addons.mozilla.org/developers/`
-2. Utworz nowy dodatek i przeslij paczke z `firefox/` (ZIP/XPI).
-3. Mozilla wykona walidacje i podpisze dodatek.
-4. Po akceptacji publikujesz wersje produkcyjna.
+1. Go to the project directory.
+2. Run the script:
 
-## Pakowanie - Chrome
+```bat
+build-chrome.bat
+```
 
-1. Przejdz do katalogu projektu.
-2. Spakuj zawartosc folderu `chrome` do archiwum ZIP (bez dodatkowego katalogu nadrzednego):
+3. Or package the contents of the `chrome` folder manually (without an extra parent directory):
 
 ```powershell
 Compress-Archive -Path .\chrome\* -DestinationPath .\allegro-classic-view-chrome.zip -Force
 ```
-
-## Podpisanie i wydanie - Chrome Web Store
-
-1. Wejdz do Chrome Web Store Developer Dashboard: `https://chrome.google.com/webstore/devconsole`
-2. Utworz nowy item i przeslij ZIP z `chrome/`.
-3. Google podpisuje rozszerzenie automatycznie podczas publikacji.
-4. Po review publikujesz wersje.
-
-## Release checklist
-
-1. Zwieksz `version` w `firefox/manifest.json` i `chrome/manifest.json`.
-2. Zbuduj nowe paczki ZIP.
-3. Wyslij nowe wersje do AMO i Chrome Web Store.
