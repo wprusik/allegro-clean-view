@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Allegro Clean View",
   "version": "1.0.0",
-  "description": "Poprawia widok produktu na Allegro - wyciąga na wierzch opis oferty i jej parametry oraz usuwa wszelkie niepotrzebne elementy - reklamy, propozycje produktów, itp.",
+  "description": "Poprawia widok produktu na Allegro - wyciąga na wierzch opis oferty i jej parametry oraz usuwa reklamy produktów",
   "permissions": [
     "storage",
     "tabs"

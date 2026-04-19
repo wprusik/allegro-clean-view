@@ -5,6 +5,11 @@ This repository contains two extension variants:
 - `firefox/` - Firefox version
 - `chrome/` - Chrome version
 
+## Store links
+
+- Firefox (AMO): https://addons.mozilla.org/en-US/firefox/addon/allegro-clean-view
+- Chrome (Chrome Web Store): _to be added_
+
 ## Development - Firefox (temporary loading)
 
 To load the development version of the extension in Firefox:
