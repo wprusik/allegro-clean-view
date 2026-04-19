@@ -252,13 +252,14 @@ function removeContainersByTitles(titles) {
     titles.forEach((title) => findElementByTitle(title)?.remove());
 }
 
-function removeCommercialContainers() {
+function removeAds() {
     findElementByTitle('Opinie o produkcie')?.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.remove();
     removeContainersByTitles(['Opinie o produkcie', 'Inni klienci oglądali również', 'Zbuduj swój zestaw', 'Propozycje z gwarancją najniższej ceny', 'Co powiesz na...?', 'Zamów zestaw w jednej przesyłce', 'Zamów w jednej przesyłce', 'Nowości', 'Nasze serie produktów', 'Okazje cenowe dla Ciebie']);
     document.querySelectorAll('div[data-box-name="template-with-offers"]').forEach((el) => el.remove());
     document.querySelector('div[data-box-name="Container carousel_reco_same_seller"]')?.remove();
     document.querySelector('div[data-box-name="Product Series Title"]')?.parentElement?.remove();
     document.querySelectorAll('img[alt="Reklama banerowa"]').forEach((el) => el?.parentElement?.parentElement?.parentElement?.remove());
+    document.querySelectorAll('div[aria-labelledby="P0-0"]').forEach(el => el?.parentElement?.remove())
 }
 
 function watchCommercialContainers() {
@@ -266,7 +267,7 @@ function watchCommercialContainers() {
         return;
     }
 
-    const observer = new MutationObserver(() => removeCommercialContainers());
+    const observer = new MutationObserver(() => removeAds());
     observer.observe(document.body, { childList: true, subtree: true });
 }
 
@@ -274,9 +275,9 @@ async function restoreOldLook() {
     await moveItemParams();
     moveProductDescription();
     removeMovedContainers();
-    removeCommercialContainers();
+    removeAds();
     watchCommercialContainers();
-    setInterval(() => removeCommercialContainers(), 1000);
+    setInterval(() => removeAds(), 1000);
 }
 
 (async () => {
