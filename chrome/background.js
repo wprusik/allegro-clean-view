@@ -60,7 +60,7 @@ function setActionIcon(enabled, tabId) {
 function setActionTitle(enabled, tabId) {
     const actionApi = (typeof browser !== "undefined" && browser?.action) ? browser.action : chrome.action;
     const details = {
-        title: enabled ? "allegro-classic-view: ON" : "allegro-classic-view: OFF"
+        title: enabled ? "Allegro Clean View: ON" : "Allegro Clean View: OFF"
     };
     if (typeof tabId === "number") details.tabId = tabId;
 
@@ -145,3 +145,4 @@ tabsApi.onUpdated?.addListener((tabId, changeInfo) => {
         refreshIconForTab(tabId);
     }
 });
+

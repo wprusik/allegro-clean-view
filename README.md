@@ -1,4 +1,4 @@
-﻿# allegro-classic-view
+# Allegro Clean View
 
 This repository contains two extension variants:
 
@@ -46,3 +46,4 @@ build-chrome.bat
 ```
 
 3. Or package the contents of the `chrome` folder manually into zip (without an extra parent directory)
+

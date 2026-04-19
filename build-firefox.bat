@@ -5,7 +5,7 @@ REM Working directory (folder of this script)
 set "WORK_DIR=%~dp0"
 set "SOURCE_DIR=%WORK_DIR%firefox"
 set "TARGET_DIR=%WORK_DIR%target"
-set "OUTPUT_FILE=%TARGET_DIR%\allegro-classic-view-firefox.xpi"
+set "OUTPUT_FILE=%TARGET_DIR%\allegro-clean-view-firefox.xpi"
 
 REM Locate 7-Zip
 set "SEVEN_ZIP=%ProgramFiles%\7-Zip\7z.exe"
@@ -43,3 +43,4 @@ if errorlevel 1 (
 
 echo Done: "%OUTPUT_FILE%"
 endlocal
+

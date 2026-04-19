@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "allegro-classic-view",
+  "name": "Allegro Clean View",
   "version": "1.0.0",
-  "description": "Przywraca klasyczny widok strony produktu Allegro.",
+  "description": "Poprawia widok produktu na Allegro - wyciąga na wierzch opis oferty i jej parametry oraz usuwa wszelkie niepotrzebne elementy - reklamy, propozycje produktów, itp.",
   "permissions": [
     "storage",
     "tabs"
@@ -14,7 +14,7 @@
     "128": "icons/icon-128.png"
   },
   "action": {
-    "default_title": "allegro-classic-view",
+    "default_title": "Allegro Clean View",
     "default_popup": "popup.html",
     "default_icon": {
       "16": "icons/icon-16.png",
@@ -30,7 +30,12 @@
   },
   "browser_specific_settings": {
     "gecko": {
-      "id": "allegro-classic-view@allegro-classic-view.local",
+      "id": "allegro-clean-view@allegro-clean-view.local",
+      "data_collection_permissions": {
+        "required": [
+          "none"
+        ]
+      },
       "strict_min_version": "109.0"
     }
   },
