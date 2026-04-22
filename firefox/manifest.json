@@ -31,11 +31,6 @@
   "browser_specific_settings": {
     "gecko": {
       "id": "allegro-clean-view@allegro-clean-view.local",
-      "data_collection_permissions": {
-        "required": [
-          "none"
-        ]
-      },
       "strict_min_version": "109.0"
     }
   },
