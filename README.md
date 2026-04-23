@@ -1,54 +1,19 @@
 # Allegro Clean View
 
+A plugin for Firefox and Chrome browsers that improves the Allegro.pl website's user experience:
+- Restores product descriptions and parameters
+- Removes all ads/recommendations from the product page
+- Removes recommendations from the Cart page
+- Removes recommendations from the Favorites page
+- Moves the new 'Combine Shipments' button to the top next to the 'Create List' button and removes the entire section presenting it so it doesn't take up additional space on the item list
+
+### Project structure
 This repository contains two extension variants:
 
 - `firefox/` - Firefox version
 - `chrome/` - Chrome version
 
-## Store links
+### Get the extension
 
 - Firefox (AMO): https://addons.mozilla.org/en-US/firefox/addon/allegro-clean-view
 - Chrome (Chrome Web Store): https://chromewebstore.google.com/detail/allegro-clean-view/bdbgeihjandpdlaekgjfhbomjfphdian
-
-## Development - Firefox (temporary loading)
-
-To load the development version of the extension in Firefox:
-
-1. Open `about:debugging#/runtime/this-firefox`.
-2. Click **Tymczasowo wczytaj dodatek**.
-3. Select the extension manifest file from the `firefox/` folder (`manifest.json`).
-
-## Development - Chrome (unpacked extension)
-
-To load the development version of the extension in Chrome:
-
-1. Open `chrome://extensions`.
-2. Enable **Developer mode**.
-3. Click **Load unpacked**.
-4. Select the `chrome/` folder.
-
-## Packaging - Firefox
-
-1. Go to the project directory.
-2. Run the script:
-
-```bat
-build-firefox.bat
-```
-
-3. Or package the contents of the `firefox` folder manually into zip (without an extra parent directory):
-
-4. Rename the file extension to `.xpi` (optional for local usage).  
-In AMO, you can also upload ZIP and Mozilla will sign the add-on.
-
-## Packaging - Chrome
-
-1. Go to the project directory.
-2. Run the script:
-
-```bat
-build-chrome.bat
-```
-
-3. Or package the contents of the `chrome` folder manually into zip (without an extra parent directory)
-
