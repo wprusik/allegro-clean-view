@@ -6,8 +6,8 @@
 // @author       allegro-clean-view
 // @homepageURL  https://github.com/wprusik/allegro-clean-view
 // @supportURL   https://github.com/wprusik/allegro-clean-view/issues
-// @updateURL    https://raw.githubusercontent.com/wprusik/allegro-clean-view/main/userscript/allegro-clean-view.user.js
-// @downloadURL  https://raw.githubusercontent.com/wprusik/allegro-clean-view/main/userscript/allegro-clean-view.user.js
+// @updateURL    https://github.com/wprusik/allegro-clean-view/raw/refs/heads/master/userscript/allegro-clean-view.user.js
+// @downloadURL  https://github.com/wprusik/allegro-clean-view/raw/refs/heads/master/userscript/allegro-clean-view.user.js
 // @match        https://allegro.pl/produkt/*
 // @match        https://allegro.pl/oferta/*
 // @match        https://allegro.pl/koszyk
