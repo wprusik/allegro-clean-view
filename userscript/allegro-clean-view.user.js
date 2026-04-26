@@ -63,9 +63,10 @@
         if (paramsModal?.parentElement?.parentElement) {
             paramsModal.parentElement.parentElement.hidden = true;
         }
+        document.querySelector('a[href="#parametry"]')?.parentElement?.parentElement?.remove();
 
         await wait(500);
-        document.querySelector('button[aria-label="Zamknij"]')?.click();
+        document.querySelector('div[data-box-name="Sidebar Parameters Container"] button[aria-label="Zamknij"]')?.click();
     }
 
     function getItemDataTable() {
@@ -251,6 +252,7 @@
     function moveProductDescription() {
         const el = document.querySelector('div[data-box-name="Sidebar Description"]');
         replaceContainerContent("Propozycje dla Ciebie", [el]);
+        document.querySelector('div[data-box-name="Product Description Bar"]')?.remove();
     }
 
     function removeMovedContainers() {
@@ -313,6 +315,7 @@
 
         removeProductAds();
         setInterval(removeProductAds, CONFIG.productCleanupIntervalMs);
+        removeContainersByTitles(["Podobne oferty"]);
     }
 
     function cleanCartSuggestions() {
