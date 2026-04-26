@@ -1,7 +1,7 @@
 ﻿// ==UserScript==
 // @name         Allegro Clean View (UserScript)
 // @namespace    https://github.com/wprusik/allegro-clean-view
-// @version      1.0.0
+// @version      1.2.0
 // @description  Przywraca bardziej czytelny widok Allegro: parametry/opis oferty + usuwanie rekomendacji.
 // @author       allegro-clean-view
 // @homepageURL  https://github.com/wprusik/allegro-clean-view
