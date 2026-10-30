@@ -1,0 +1,47 @@
+/* Wczesne ukrywanie elementów na stronie Ulubione (document_start), zanim
+   favorites-content.js zdąży usunąć je z DOM - dzięki temu nie migają.
+   Klasy na <html> ustawia favorites-content.js (synchronicznie na starcie,
+   potem korygowane wg zapisanych ustawień). */
+
+/* "Propozycja połączenia ofert" (klucz combineOffersProposal): panel
+   "Oszczędzaj na przesyłkach!" z propozycją, przyciskiem "Dodaj do koszyka"
+   i "Połącz inne przesyłki". Cały obszar to kontener
+   data-testid="partial-optimization-content" (w kodzie strony 1 raz).
+   Uwaga: data-box-name="purchase-optimizer-partial-optimization" leży tylko
+   w środku i nie obejmuje nagłówka ani przycisków, więc nie nadaje się do
+   ukrycia całości. */
+html.acv-hide-favorites-combine-offers div[data-testid="partial-optimization-content"],
+html.acv-hide-favorites-combine-offers div[data-testid="optimizer-content"] {
+    display: none !important;
+}
+
+/* "Zainspirowane Twoimi ulubionymi" (klucz inspiredByFavorites) i "Inni klienci
+   kupują również" (klucz othersAlsoBuy): dwa karuzelowe boksy w kontenerze
+   data-box-name="layout.container.favourites.reco" (#recoSlotId). Każdy ma
+   unikalny data-box-name (1 raz w kodzie strony). Wrapper kontenera ma
+   margin 24px góra/dół, więc gdy ukryte są OBA boksy, chowamy cały kontener
+   (inaczej zostałby pusty odstęp ~48px). */
+html.acv-hide-favorites-inspired div[data-box-name="layout.container.inspiration.items"],
+html.acv-hide-favorites-others-buy div[data-box-name="layout.container.complementary.items"] {
+    display: none !important;
+}
+html.acv-hide-favorites-inspired.acv-hide-favorites-others-buy div[data-box-name="layout.container.favourites.reco"] {
+    display: none !important;
+}
+
+/* Odstęp między ofertami. Każda oferta na tej stronie ma margin-top: 16px
+   (odstęp między ofertami to właśnie ten margines), a oferta leżąca pod
+   ukrytym panelem go nie ma. Oba panele siedzą w jednym wrapperze między
+   dwiema ofertami; po ukryciu panelu zostaje on pusty, więc dostaje stałą
+   wysokość 16px (= margin-top pozostałych ofert). Atrybut
+   data-acv-favorites-gap dodaje JS (na wypadek gdyby :has() przestało łapać
+   wrapper po usunięciu panelu). Przycisk "Połącz przesyłki" jest przenoszony
+   poza ten wrapper przez JS. */
+html.acv-hide-favorites-combine-offers div:has(> div[data-testid="partial-optimization-content"]),
+html.acv-hide-favorites-combine-offers div:has(> div[data-testid="optimizer-content"]),
+html.acv-hide-favorites-combine-offers div[data-acv-favorites-gap] {
+    height: 16px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+}

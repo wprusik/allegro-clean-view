@@ -1,0 +1,243 @@
+/*
+ * Natychmiastowe ukrywanie sekcji strony produktu Allegro o STABILNYCH,
+ * unikalnych selektorach atrybutowych (data-box-name, data-analytics-*).
+ * Wstrzykiwane przez content_scripts z run_at:"document_start", więc
+ * przeglądarka aplikuje te reguły od pierwszej klatki renderowania -
+ * zanim jeszcze JS strony (i nasz content.js) w ogóle zdąży się uruchomić.
+ *
+ * WAŻNE: to NIE zapobiega pobraniu obrazków/zasobów tych sekcji (Allegro
+ * i tak je preloaduje z wygenerowanego po stronie serwera HTML) - ukrywa
+ * tylko ich WYŚWIETLENIE, więc użytkownik nigdy nie widzi "mignięcia".
+ * Dla oszczędności transferu/requestów nie da się nic więcej zrobić z
+ * poziomu rozszerzenia bez przechwytywania i modyfikowania odpowiedzi
+ * sieciowych (webRequest/declarativeNetRequest), co jest mocno
+ * ograniczone w Manifest V3 i nie pozwala na selektywne wycinanie
+ * fragmentów HTML w locie.
+ *
+ * Każda reguła tutaj jest WARUNKOWA - obowiązuje tylko gdy <html> ma
+ * odpowiednią klasę acv-hide-*, ustawianą przez content.js na podstawie
+ * zapisanych w chrome.storage ustawień (odczytywanych asynchronicznie,
+ * ale ustawianych na <html> najwcześniej jak się da - patrz komentarz
+ * w content.js przy _acvApplyInstantHideClasses). Elementy usuwane
+ * ZAWSZE (niezależnie od ustawień w popupie) nie potrzebują klasy
+ * warunkowej.
+ *
+ * Elementy identyfikowane WYŁĄCZNIE po treści tekstowej nagłówka <h2>
+ * (np. "Ostatnio przeglądane", "Podobne oferty") NIE MOGĄ tu trafić - standardowy
+ * CSS nie ma odpowiednika :contains(). Te sekcje obsługuje MutationObserver
+ * w content.js (natychmiastowa reakcja na dodanie węzła do DOM, zamiast
+ * dawnego sprawdzania co 1 sekundę).
+ */
+
+/* Sterowane checkboxem "Reklamy (DSS i banerowe)" (ads).
+   Reklamy DSS (Allegro Ads) - kontener template-with-offers, którego
+   przodkiem jest zawsze allegro.ads.dss.template (sprawdzone w kodach
+   stron). Reklamy banerowe (img[alt="Reklama banerowa"]) obsługuje JS w
+   removeAds (content.js) - wymagają szukania po atrybucie obrazka i
+   wyboru najbliższego kontenera, czego CSS nie potrafi.
+   To OSOBNA rzecz niż "Reklama pod stopką" (sekcja "Różne", slot parallax). */
+/* Reklama wideo DSS (Allegro Ads): kontener data-box-name
+   "allegro.ads.dss.video.showitem2" (numer na końcu bywa zmienny), więc
+   celujemy w stabilny data-prototype-id="allegro.ads.dss.video" - w kodzie
+   strony występuje jednokrotnie. Ten sam checkbox co reszta reklam DSS. */
+html.acv-hide-ads div[data-prototype-id="allegro.ads.dss.video"],
+/* Baner DSS (allegro.ads.dss.banner): na części stron sama grafika nie ma
+   alt="Reklama banerowa" (lub jej nie ma w DOM), więc JS po img jej nie
+   łapał i zostawał sam przycisk "Sponsorowane" - celujemy w kontener. */
+html.acv-hide-ads div[data-prototype-id="allegro.ads.dss.banner"],
+/* Mały baner Google pod ceną (strony ogłoszeń /ogloszenie/*): slot
+   data-box-name="underPrice", data-prototype-id="allegro.advertisement.slot.underPrice"
+   (iframe safeframe, link zaczyna się od adclick.g.doubleclick.net/pcs/). Stabilny
+   jest prototype-id; box-name "underPrice" jest zbyt ogólny. */
+html.acv-hide-ads div[data-prototype-id="allegro.advertisement.slot.underPrice"],
+html.acv-hide-ads div[data-box-name="template-with-offers"] {
+    display: none !important;
+}
+
+/* Sterowane checkboxem "Inni klienci oglądali również" (othersAlsoViewed).
+   To jest WARIANT ATRYBUTOWY tej sekcji - Allegro czasem renderuje ją też
+   bez tego atrybutu, z samym tytułem tekstowym "Inni klienci oglądali
+   również" w <h2> - ten wariant nadal łapie MutationObserver w content.js
+   jako uzupełnienie. */
+html.acv-hide-others-also-viewed div[data-box-name="Container carousel_reco_same_seller"] {
+    display: none !important;
+}
+
+/* Sterowane checkboxem "Nasze serie produktów" (ourProductSeries).
+   Prawidłowy atrybut kontenera to "Product series" (bez słowa "Title" -
+   to była pomyłka w oryginalnym kodzie rozszerzenia, przez którą ta
+   sekcja nigdy nie była faktycznie ukrywana/usuwana, mimo zaznaczonego
+   checkboxa). Selektor :has() (wspierane w Chrome/Chromium od wersji 105,
+   a więc bezpiecznie tutaj) pozwala ukryć CAŁY nadrzędny
+   .opbox-sheet-wrapper (razem z nagłówkiem "Nasze serie produktów",
+   który jest <h3>, nie <h2> - stąd też nie łapał go dotychczasowy
+   wariant tekstowy oparty tylko o <h2>) w jednym kroku, bez potrzeby
+   dodatkowego sprzątania osieroconego, pustego nagłówka przez JS. */
+/* UWAGA: bez części :not(...) selektor łapałby KAŻDY .opbox-sheet-wrapper będący
+   przodkiem "Product series" - również zewnętrzny wrapper, który zawiera całą
+   zawartość strony (potwierdzone na stronie z zakończoną sprzedażą: znikała cała
+   strona poza nagłówkiem i stopką). :not(:has(...)) zostawia tylko NAJBLIŻSZY
+   wrapper, czyli to samo co .closest(".opbox-sheet-wrapper") w content.js. */
+html.acv-hide-our-product-series div.opbox-sheet-wrapper:has(div[data-box-name="Product series"]):not(:has(div.opbox-sheet-wrapper:has(div[data-box-name="Product series"]))) {
+    display: none !important;
+}
+
+/* Sterowane checkboxem "Kupony za Allegro Pay" (allegroPayCoupons).
+   Mały panel promujący aktywację Allegro Pay z kuponami rabatowymi.
+   Nagłówek to <h4>, nie <h2> - poza zasięgiem istniejącego wariantu
+   tekstowego (findElementByTitle szuka tylko <h2>), więc identyfikacja
+   wyłącznie po stabilnym, specyficznym atrybucie kontenera
+   data-box-name="allegroPay container". */
+html.acv-hide-allegro-pay-coupons div[data-box-name="allegroPay container"] {
+    display: none !important;
+}
+
+/* Sterowane checkboxem "Zapytaj o ten produkt" (askOnPage).
+   Panel z polem do zadania pytania AI o produkt (funkcja "Beta").
+   Kontener data-box-name="allegro.ask.on.page.container.above" (wcześniej)
+   lub "allegro.ask.on.page.container.below" (obecnie; Allegro przenosi panel
+   między wariantami above/below) - dlatego selektor po prefiksie. Kontener jest
+   RODZICEM własnego .opbox-sheet-wrapper (a nie odwrotnie), więc jego
+   usunięcie kasuje całą sekcję od razu, bez osieroconego wrappera -
+   removeEmptyOpboxWrappers w content.js nie musi tu nic dodatkowo
+   sprzątać. */
+html.acv-hide-ask-on-page div[data-box-name^="allegro.ask.on.page.container"] {
+    display: none !important;
+}
+
+/* Sterowane checkboxem "O marce" (brandInfo).
+   Pasek z logo marki i linkiem otwierającym modal z opisem marki, nad
+   opisem oferty. Nagłówek to <h2>"O marce"</h2>, ale to zbyt ogólny
+   tekst, żeby polegać wyłącznie na nim (wiele innych sekcji na stronie
+   Allegro może mieć podobne, krótkie nagłówki) - identyfikacja po
+   stabilnym, unikalnym atrybucie kontenera data-box-name="Bars".
+   W odróżnieniu od "Zapytaj o ten produkt"/"parallax", ten kontener jest
+   DZIECKIEM swojego .opbox-sheet-wrapper (nie rodzicem), więc po jego
+   usunięciu zostaje pusty, osierocony wrapper - sprząta go generyczne
+   removeEmptyOpboxWrappers() w content.js (element nie ma tekstu ani
+   obrazka po usunięciu diva "Bars", więc kwalifikuje się do sprzątania). */
+html.acv-hide-brand-info div[data-box-name="Bars"] {
+    display: none !important;
+}
+
+/* Sterowane checkboxem "Sugestia AI" (upsellAiSuggestion).
+   Sekcja z tytułem w stylu "Wyższy model, podobna cena. Sprawdź Outlet",
+   rekomendująca inny, droższy produkt (treść generowana/wspierana przez
+   AI - stąd nazwa). Identyfikacja po stabilnym, unikalnym atrybucie
+   kontenera data-box-name="Upsell Container" (tekst tytułu jest
+   dynamiczny i zmienia się zależnie od oferty, więc wariant tekstowy nie
+   nadawałby się tutaj). Kontener jest RODZICEM swojego
+   .opbox-sheet-wrapper (jak "Zapytaj o ten produkt"/"O marce" - patrz
+   analogiczne komentarze), więc jego usunięcie kasuje całą sekcję od
+   razu, bez osieroconego wrappera. */
+html.acv-hide-upsell-ai-suggestion div[data-box-name="Upsell Container"] {
+    display: none !important;
+}
+
+/* Sterowane checkboxem "Co sądzisz o tej stronie?" (productSurvey).
+   Baner "Co sądzisz o tej stronie?" zachęcający do wypełnienia ankiety.
+   To WARIANT dla niezalogowanego użytkownika - inny niż ten, który już
+   był obsługiwany w removeAds (content.js) przez
+   [data-analytics-click-label="showProductSurvey"], którego na tej
+   stronie w ogóle nie ma (zamiast niego jest
+   data-analytics-interaction-label="showProductSurvey" na elemencie <a>,
+   zbyt generyczny i niepewny do samodzielnego użycia w CSS). Identyfikacja
+   po stabilnym, unikalnym atrybucie zewnętrznego kontenera
+   data-box-name="surveyContainer", który jest RODZICEM swojego
+   .opbox-sheet-wrapper (jak "Zapytaj o ten produkt"/"O marce"/"Sugestia
+   AI"), więc jego usunięcie kasuje całą sekcję od razu, bez osieroconego
+   wrappera. */
+html.acv-hide-product-survey div[data-box-name="surveyContainer"],
+html.acv-hide-product-survey [data-analytics-click-label="showProductSurvey"] {
+    /* Druga linia selektora to wariant baneru ankiety dla ZALOGOWANYCH
+       (niezalogowani mają surveyContainer). Wcześniej ta reguła była
+       bezwarunkowa (bez klasy html.acv-hide-*), przez co odznaczenie
+       checkboxa nie wyłączało ukrywania tego wariantu. */
+    display: none !important;
+}
+
+/* Sterowane checkboxem "Co powiesz na...?" (infiniteFeed).
+   Sekcja z nieskończonym feedem powiązanych ofert na samym dole strony
+   (doładowywana dynamicznie przy scrollu - nie występuje w DOM przy
+   pierwszym załadowaniu strony, więc jej brak w przesłanym pełnym kodzie
+   strony jest normalny, nie oznacza braku sekcji). Identyfikacja po
+   stabilnym, unikalnym atrybucie kontenera
+   data-box-name="infinite-feed.wrapper" - nagłówek "Co powiesz na...?"
+   wewnątrz jest zbyt generyczny/zmienny, żeby budować na nim selektor.
+   Kontener jest RODZICEM swojego .opbox-sheet-wrapper (jak "Zapytaj o
+   ten produkt"/"O marce"/"Sugestia AI"/"Co sądzisz o tej stronie?"),
+   więc jego usunięcie kasuje całą sekcję od razu, bez osieroconego
+   wrappera. */
+/* Zastępnik leniwego ładowania tej sekcji (infinite-feed.lazy.container, ze
+   spinnerem infinite-feed.lazy.spinner w środku): przed doładowaniem treści
+   pokazuje się jako pusta karta ze spinnerem (czasem wisi na stałe, gdy treść się
+   nie dociągnie). Ukrywamy go razem z sekcją; ukryty (display: none) nie wchodzi
+   w pole widzenia, więc treść prawdopodobnie w ogóle się nie doładuje. */
+html.acv-hide-infinite-feed div[data-box-name="infinite-feed.wrapper"],
+html.acv-hide-infinite-feed div[data-box-name="infinite-feed.lazy.container"] {
+    display: none !important;
+}
+
+/* Sterowane checkboxem "Oferty Allegro Lokalnie" (lokalnieOffers).
+   Blok promujący oferty z Allegro Lokalnie (nagłówki "Podobne z drugiej
+   ręki" i "Zobacz oferty z drugiej ręki", z komunikatem o przeniesieniu
+   na Lokalnie). To NIE jest reklama DSS/banerowa - stąd osobny checkbox,
+   niezależny od "Reklamy (DSS i banerowe)". Kontener
+   data-box-name="Lokalnie offers container" obejmuje całość (sidebar
+   + baner vendor.lokalnie); nazwa występuje w DOM jednokrotnie.
+   Leży w "forbidden categories" wewnątrz "Cobalt Container Special bottom",
+   ale tych rodziców NIE ukrywamy (obejmują też inne elementy). */
+html.acv-hide-lokalnie-offers div[data-box-name="Lokalnie offers container"] {
+    display: none !important;
+}
+
+/* Sterowane checkboxem "Kursor nie zmienia obrazów" (disableGalleryHover,
+   domyślnie wyłączone): wyłączenie powiększania obrazu głównego po najechaniu
+   kursorem w widoku normalnym. Zoom (scale3d 1.5 + translate3d przy każdym ruchu
+   myszy, reset po opuszczeniu) to inline style na div w boksie showoffer.gallery
+   (jedyny element z scale3d). Wymuszamy tu stan domyślny (bez zoomu) z !important,
+   więc JS Allegro może zmieniać style, a obraz się nie rusza; kursor (lupka)
+   i klik otwierający galerię nie są ruszane. Reguła działa TYLKO przy zamkniętej
+   galerii (przycisk "Zamknij" istnieje tylko w otwartej), bo w galerii klik
+   w obraz główny ma powiększać i przesuwać obraz. */
+html.acv-disable-gallery-zoom div[data-box-name="showoffer.gallery"]:not(:has(button[aria-label="Zamknij"])) div[style*="scale3d"] {
+    transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) !important;
+}
+
+/* Sterowane checkboxem "Polecane produkty" (recommendedProducts).
+   Karuzela z zakładkami pod tytułem h2 "Polecane produkty"
+   (data-role="replaceable-title" - tytuł bywa podmieniany w eksperymentach,
+   dlatego nie szukamy go po tekście). Najbardziej zewnętrzny kontener
+   div[data-box-name="tabs_bpg_novelty_container"] (1 raz na stronie) obejmuje
+   cały blok z marginesami, więc po ukryciu nie zostaje odstęp. */
+html.acv-hide-recommended-products div[data-box-name="tabs_bpg_novelty_container"] {
+    display: none !important;
+}
+
+/* Sterowane checkboxem "Szukana oferta jest nieaktualna" (endedOfferReco).
+   Karuzela "Szukana oferta jest nieaktualna - może podobny przedmiot?" tylko
+   na stronie zakończonej oferty, w DWÓCH miejscach:
+   - u góry: div[data-box-name="Container carousel reco ended"] (unikalny, 1 raz),
+   - na dole: wewnątrz "reco.bottom.container experiment" > non_mbox_container,
+     jako "Container carousel_reco_ended" (z podkreśleniem; przed doładowaniem
+     wariant "...-placeholder"). UWAGA: "reco.bottom.container experiment"
+     występuje też na zwykłej ofercie (zawiera tam karuzelę "all sellers"),
+     więc ukrywamy go TYLKO gdy zawiera ten box - :has(). Poza tym kontener ma
+     tylko piksele analityczne, więc nie zostaje pusty odstęp. */
+html.acv-hide-ended-offer-reco div[data-box-name="Container carousel reco ended"],
+html.acv-hide-ended-offer-reco div[data-box-name="reco.bottom.container experiment"]:has(div[data-box-name^="Container carousel_reco_ended"]) {
+    display: none !important;
+}
+
+/* Naprawa: prawy panel oferty / szare kwadraty nakładają się na otwartą galerię zdjęć.
+   Przyczyna (potwierdzona na zrzutach DOM): Allegro nakłada na kolumny strony
+   (div._9491e_K9H9J) klasę sticky z inline "z-index:1" zależnie od ich wysokości,
+   a ukrycie sekcji zmienia wysokości - więc częściej trafia to lewą kolumnę.
+   Okno galerii (fixed, z-index:10000) leży WEWNĄTRZ lewej kolumny, więc jej
+   z-index:1 tworzy stacking context i panel z prawej kolumny maluje się nad
+   galerią. Gdy galeria jest otwarta (lewa kolumna zawiera przycisk "Zamknij"
+   galerii), podnosimy z-index lewej kolumny ponad prawą. Selektor po
+   stabilnym id kolumny i data-box-name, bez klas z hashem. */
+#showproduct-left-column-wrapper > div:has([data-box-name="showoffer.gallery"] button[aria-label="Zamknij"]) {
+    z-index: 10001 !important;
+}

@@ -1,30 +1,35 @@
-# Allegro Clean View
+[English](README.en.md)
 
-A plugin for Firefox and Chrome browsers that improves the Allegro.pl website's user experience:
-- Restores product descriptions and parameters
-- Removes all ads/recommendations from the product page
-- Removes recommendations from the Cart page
-- Removes recommendations from the Favorites page
-- Moves the new 'Combine Shipments' button to the top next to the 'Create List' button and removes the entire section presenting it so it doesn't take up additional space on the item list
+# Allegro Clean View (mod) <img width="32" height="32" alt="icon-32" src="https://github.com/user-attachments/assets/69bb3620-1cbb-4810-98cd-d3cb085fd408" />
 
-### Project structure
-This repository contains three extension variants:
+<img width="252" height="304" align="left" alt="zrzut menu" src="https://github.com/user-attachments/assets/46f5f20c-9c95-4c33-b67c-68bccfe9993d" />
 
-- `firefox/` - Firefox version
-- `chrome/` - Chrome version
-- `userscript/` - UserScript version (without control panel)
+Rozszerzenie do przeglądarek opartych na silniku Chromium, które usuwa zbędne elementy ze stron serwisu Allegro.pl: reklamy, karuzele z rekomendacjami, banery promocyjne i inne rozpraszacze. Każdy element można włączyć lub wyłączyć indywidualnie w menu rozszerzenia.
 
-### Get the extension
+Ukrywane elementy obejmują kluczowe sekcje serwisu, w tym listy produktów (w kategoriach i wynikach wyszukiwania), strony ofert (również tych zakończonych), porównywarkę ofert, ulubione, koszyk, potwierdzenie zamówienia, historię zakupów oraz inne podstrony.
 
-- Firefox (AMO): https://addons.mozilla.org/en-US/firefox/addon/allegro-clean-view
-- Chrome (Chrome Web Store): https://chromewebstore.google.com/detail/allegro-clean-view/bdbgeihjandpdlaekgjfhbomjfphdian
+Dodaje również kilka przydatnych funkcji jak zmiana domyślnego sortowania, rozwijanie opisu czy wyłączenie zmiany obrazów po najechaniu na miniatury.
 
-### UserScript version
+W sumie jest to 60 elementów do ukrycia plus kilka funkcji.
+<br clear="left">
 
-You can also use a standalone UserScript version: `userscript/allegro-clean-view.user.js`
+#### O tym forku
+Jest to zmodyfikowana i zaktualizowana wersja rozszerzenia [Allegro Clean View](https://github.com/wprusik/allegro-clean-view) autorstwa [wprusik](https://github.com/wprusik), udostępnionego na licencji MIT. Wszelkie zasługi za oryginalny pomysł i kod należą się pierwotnemu autorowi. Niniejszy fork rozszerza to rozwiązanie o nowe elementy do ukrycia oraz funkcje.
 
-Configuration:
-- Edit the `CONFIG` object at the top of the script:
-  - `pageSettings.product` - enable/disable product page features
-  - `pageSettings.cart` - enable/disable cart cleanup
-  - `pageSettings.favorites` - enable/disable favorites cleanup
+#### Licencja
+MIT. Zobacz plik [LICENSE](LICENSE).
+
+## Instalacja (tryb offline, rozpakowane rozszerzenie)
+1. [Pobierz najnowszy plik ZIP](https://github.com/xeophyte/Allegro-Clean-View-mod/releases/latest/download/Allegro.Clean.View.mod.zip) i wypakuj go (folder „Allegro Clean View (mod)”) do docelowej lokalizacji, w której ma znajdować się folder tego rozszerzenia.
+2. Otwórz stronę rozszerzeń w swojej przeglądarce:
+- Chrome / Chromium: `chrome://extensions`
+- Edge: `edge://extensions`
+- Vivaldi: `vivaldi://extensions`
+3. Włącz **Tryb programisty** (zazwyczaj przełącznik w prawym górnym rogu).
+4. Kliknij **Załaduj rozpakowane** i wybierz wypakowany folder „Allegro Clean View (mod)”.
+
+**Uwagi**
+- Nie usuwaj, nie przenoś ani nie zmieniaj nazwy wypakowanego folderu, ponieważ przeglądarka ładuje rozszerzenie bezpośrednio z tej lokalizacji.
+- Aby zaktualizować rozszerzenie, pobierz nowy plik ZIP, podmień pliki w tym samym folderze i kliknij przycisk przeładowania na karcie rozszerzenia na stronie rozszerzeń.
+
+### [Wszystkie wersje](https://github.com/xeophyte/Allegro-Clean-View-mod/releases)

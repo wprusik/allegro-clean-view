@@ -1,0 +1,30 @@
+/* Wczesne ukrywanie elementów na stronie "Oferty produktu"
+   (allegro.pl/oferty-produktu/*, document_start), zanim product-offers-content.js
+   zdąży usunąć je z DOM - dzięki temu nie migają.
+   Klasy na <html> ustawia product-offers-content.js (synchronicznie na starcie,
+   potem korygowane wg zapisanych ustawień). */
+
+/* "Marka sponsorowana" (klucz sponsoredBrand): baner DSS + szablon reklamowy
+   marki. Dwa bloki (każdy najwyższy element w drzewie swojej reklamy, w kodzie
+   strony po 1 razie): nad listą ofert - data-box-name="premium.with.dfp",
+   pod listą ofert - data-box-name="ads.dss.listing.bottom.container". */
+html.acv-hide-product-offers-sponsored-brand div[data-box-name="premium.with.dfp"],
+html.acv-hide-product-offers-sponsored-brand div[data-box-name="ads.dss.listing.bottom.container"] {
+    display: none !important;
+}
+
+/* "Odkryj oficjalny sklep" (klucz officialStore): kafelek <li> w liście ofert
+   ("Odkryj Oficjalny Sklep MK Cafe", zdjęcie marki, przycisk "ZOBACZ SKLEP MARKI"),
+   2. pozycja na liście. Nazwa marki się zmienia, stały jest link
+   a[title="ZOBACZ SKLEP MARKI"] (1 raz na stronie). Cały <li> należy do listy
+   ofert, więc ukrycie go nie zostawia pustych kontenerów. */
+html.acv-hide-product-offers-official-store li:has(> div a[title="ZOBACZ SKLEP MARKI"]) {
+    display: none !important;
+}
+
+/* "Podobne oferty" (klucz similarOffers): karuzela z tytułem h3 "Podobne oferty"
+   pod listą ofert. Cały blok to kontener data-box-name="similar offers"
+   (ze spacją; w kodzie strony 1 raz) - obejmuje tytuł i karuzelę. */
+html.acv-hide-product-offers-similar-offers div[data-box-name="similar offers"] {
+    display: none !important;
+}

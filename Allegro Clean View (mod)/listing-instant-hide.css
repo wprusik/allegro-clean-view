@@ -1,0 +1,102 @@
+/* Wczesne ukrywanie elementów na stronach "Kategorie i wyszukiwanie"
+   (allegro.pl/kategoria/* oraz allegro.pl/listing, document_start), zanim
+   listing-content.js zdąży je wykryć. Klasy na <html> ustawia listing-content.js
+   (synchronicznie na starcie, potem korygowane wg zapisanych ustawień).
+
+   Strony kategorii i wyników wyszukiwania mają prawie identyczny szablon (ok.
+   217 wspólnych nazw boksów), więc to jedna wspólna sekcja. Elementy, które
+   występują tylko w jednym typie strony, po prostu nie istnieją w drugim.
+   Tylko CSS (bez usuwania z DOM) - to listy zarządzane przez Reacta, a ponowne
+   renderowanie listy (np. zmiana filtrów) mogłoby się wysypać po ręcznym
+   usunięciu węzła. */
+
+/* "Rekomendacje dla Ciebie" (klucz recommendations): karuzela rekomendacji.
+   Wspólna dla obu typów stron pod data-box-name="rekomendacje". W wynikach
+   wyszukiwania jest dodatkowo opakowana w kontener
+   data-box-name="smartweek-listing-2021-reco-container", który zawiera tylko ją -
+   ukrywamy go też, żeby nie zostawał pusty wrapper. */
+html.acv-hide-listing-recommendations div[data-box-name="rekomendacje"],
+html.acv-hide-listing-recommendations div[data-box-name="smartweek-listing-2021-reco-container"] {
+    display: none !important;
+}
+
+/* "Artykuły (Nie możesz się zdecydować?)" (klucz articles): panel z kafelkami
+   artykułów i linkiem "czytaj więcej". Kontener data-box-name="articles" jest
+   wspólny dla kategorii i wyszukiwania (w kodzie obu stron 1 raz); zmienia się
+   tylko nazwa wewnętrznego boksu ("zajawki artykulow" vs "articles zajawki"),
+   więc ukrywamy zewnętrzny kontener, który obejmuje tytuł i oba warianty. */
+html.acv-hide-listing-articles div[data-box-name="articles"] {
+    display: none !important;
+}
+
+/* "Sponsorowane pod filtrami" (klucz sponsoredBelowFilters): panel reklamowy w
+   lewej kolumnie pod filtrami, złożony z dwóch rodzajów reklamy: sponsorowane
+   oferty (car0usels.base, grupa sponsored_offers_ppc_ads) oraz reklama DSS
+   (wideo/baner/szablon + slot skyscroll), przewijana razem ze stroną.
+   Cały panel to jeden kontener data-box-name="seoLazyBelowFilters", wspólny dla
+   kategorii i wyszukiwania (w wyszukiwaniu część DSS jest w
+   "skyscroll.wrapper.without.erotic", ale leży wewnątrz tego kontenera).
+   W kodach obu stron zawiera wyłącznie reklamy (brak tytułów/treści). */
+html.acv-hide-listing-sponsored-below-filters div[data-box-name="seoLazyBelowFilters"] {
+    display: none !important;
+}
+
+/* "Panele sponsorowane" (klucz sponsoredPanels): baner DSS + szablon reklamowy
+   marki, nad listą ofert (premium.with.dfp) i pod listą ofert
+   (ads.dss.listing.bottom.container) - w kodach obu stron po 1 razie każdy.
+   Te same kontenery co "Marka sponsorowana" w sekcji "Oferty produktu"
+   (product-offers-instant-hide.css) - tu osobny klucz, bo to inna strona. */
+html.acv-hide-listing-sponsored-panels div[data-box-name="premium.with.dfp"],
+html.acv-hide-listing-sponsored-panels div[data-box-name="ads.dss.listing.bottom.container"] {
+    display: none !important;
+}
+
+/* "Propozycje AI" (klucz aiSuggestions): panel asystenta AI (Aifred) nad listą
+   ofert - pytanie + kafelki (np. przedziały cenowe lub podkategorie). Kontener
+   data-box-name="allegro.aifred.assistant.topListing", wspólny dla kategorii i
+   wyszukiwania (w kodach obu stron 1 raz). */
+html.acv-hide-listing-ai-suggestions div[data-box-name="allegro.aifred.assistant.topListing"] {
+    display: none !important;
+}
+
+/* "Linki powiązane/podobne" (klucz relatedLinks): ta sama budowa (nagłówek h5 +
+   lista linków) na obu stronach, różni się tylko nazwa kontenera:
+   - kategoria: "Powiązane kategorie" - data-box-name="kategorie komplementarne kontener",
+   - wyszukiwanie: "Podobne wyszukiwania" - data-box-name="podobne wyszukiwania kontener".
+   W kodach obu stron po 1 razie każdy. */
+html.acv-hide-listing-related-links div[data-box-name="kategorie komplementarne kontener"],
+html.acv-hide-listing-related-links div[data-box-name="podobne wyszukiwania kontener"] {
+    display: none !important;
+}
+
+/* "Podobne frazy" (klucz similarPhrases): linijka "Podobne: ..." pod tytułem
+   strony z propozycjami innych fraz wyszukiwania. Tylko na wynikach
+   wyszukiwania (data-box-name="didYouMean"), nie istnieje na kategorii. */
+html.acv-hide-listing-similar-phrases div[data-box-name="didYouMean"] {
+    display: none !important;
+}
+
+/* "Porady" (klucz advice): długi tekst SEO (rozwijany przyciskiem
+   "więcej"/"mniej") na dole strony kategorii. Tylko na kategorii
+   (data-box-name="seo text container"), nie istnieje na wyszukiwaniu. */
+html.acv-hide-listing-advice div[data-box-name="seo text container"] {
+    display: none !important;
+}
+
+/* "Top 10" (klucz top10): ranking-karuzela "Top 10" na stronie kategorii.
+   Cały blok to div[data-box-name="Ranking Wrapper"] (1 raz w kodzie strony;
+   w środku "Ranking Carousel Container", karuzela, link i disclaimer). */
+html.acv-hide-listing-top10 div[data-box-name="Ranking Wrapper"] {
+    display: none !important;
+}
+
+/* "Strefa okazji" (klucz dealsZone): kafelek-karuzela ("Strefa Okazji" + kilka
+   promowanych produktów + link "Przejdź do Strefy Okazji") wstawiany jako
+   zwykły <li> wewnątrz listy ofert kategorii - bez własnego data-box-name,
+   klasy z losowym hashem. Identyfikacja po jedynym na stronie linku do
+   "/strefaokazji/dzial/" w stopce kafelka. Tylko CSS (jak pozostałe elementy
+   tej sekcji) - usuwanie z DOM mogłoby wysypać listę ofert zarządzaną przez
+   Reacta. */
+html.acv-hide-listing-deals-zone li:has(> div > p > a[href*="/strefaokazji/dzial/"]) {
+    display: none !important;
+}

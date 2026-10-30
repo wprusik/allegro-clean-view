@@ -1,0 +1,73 @@
+/* Wczesne ukrywanie elementów na stronie Transakcja ("Dziękujemy" po zakupie,
+   /transakcja/dziekujemy) w document_start, zanim transaction-content.js
+   zdąży usunąć je z DOM - dzięki temu nie migają. Klasy na <html> ustawia
+   transaction-content.js (synchronicznie na starcie, potem korygowane wg
+   zapisanych ustawień). */
+
+/* "Gwarancja najniższej ceny" (klucz lowestPriceGuarantee): sponsorowana
+   karuzela "Gwarancja najniższej ceny dla Ciebie". Kontener
+   data-box-name="[transaction.container] Sponsored Offers Carousel"
+   (w kodzie strony 1 raz). data-prototype-id="allegro.transaction.container"
+   jest wspólny dla wielu boxów na tej stronie, więc nie nadaje się. */
+html.acv-hide-transaction-lowest-price-guarantee div[data-box-name="[transaction.container] Sponsored Offers Carousel"] {
+    display: none !important;
+}
+
+/* "Wybrane dla Ciebie" (klucz selectedForYou): karuzela polecanych ofert
+   (recoOffers, kampania MAJOR_CAMPAIGN). Kontener
+   data-box-name="[transaction.container] recoOffers_THANK_YOU_PAGE_MAJOR_CAMPAIGN".
+   Nazwa dokładna, bez prefiksu - inaczej złapałby też inny box
+   "[transaction.container] recoOffers_THANK_YOU_PAGE" ("Na podstawie
+   oglądanych przez Ciebie ofert"). */
+html.acv-hide-transaction-selected-for-you div[data-box-name="[transaction.container] recoOffers_THANK_YOU_PAGE_MAJOR_CAMPAIGN"] {
+    display: none !important;
+}
+
+/* "Na podstawie oglądanych" (klucz basedOnViewed): karuzela "Na podstawie
+   oglądanych przez Ciebie ofert". Kontener
+   data-box-name="[transaction.container] recoOffers_THANK_YOU_PAGE" (nazwa
+   dokładna; inny box z suffixem _MAJOR_CAMPAIGN to "Wybrane dla Ciebie"). */
+html.acv-hide-transaction-based-on-viewed div[data-box-name="[transaction.container] recoOffers_THANK_YOU_PAGE"] {
+    display: none !important;
+}
+
+/* "Na podstawie polubionych" (klucz basedOnLiked): karuzela "Na podstawie
+   polubionych przez Ciebie ofert". Kontener
+   data-box-name="[transaction.container] recoOffers_INSPIRED_BY_FAVOURITES"
+   (nazwa dokładna). */
+html.acv-hide-transaction-based-on-liked div[data-box-name="[transaction.container] recoOffers_INSPIRED_BY_FAVOURITES"] {
+    display: none !important;
+}
+
+/* "Kupuj regularnie" (klucz buyRegularly): karuzela "Kupuj regularnie".
+   Kontener data-box-name="[transaction.container] recoOffers_DSH_RECURRING_PURCHASES_MAIN_PAGE"
+   (nazwa dokładna). */
+html.acv-hide-transaction-buy-regularly div[data-box-name="[transaction.container] recoOffers_DSH_RECURRING_PURCHASES_MAIN_PAGE"] {
+    display: none !important;
+}
+
+/* "Nieskończona dawka pomysłów" (klucz infiniteFeed): box layout.container
+   data-box-name="infinite-feed.container.web" (bez prefiksu [transaction.container]). */
+html.acv-hide-transaction-infinite-feed div[data-box-name="infinite-feed.container.web"] {
+    display: none !important;
+}
+
+/* "Allegro Klik" (klucz allegroKlik): box "Wystarczy Klik i część kasy wraca".
+   data-box-name="[transaction.container] CFS-booster" (1 raz w DOM). */
+html.acv-hide-transaction-allegro-klik div[data-box-name="[transaction.container] CFS-booster"] {
+    display: none !important;
+}
+
+/* "Reklama" (klucz ads): prawa kolumna z reklamami DSS.
+   Box data-box-name="Right [hidden for mobileapp]" (zawiera tylko ads.wrapper.container)
+   + jego bezpośredni rodzic (kolumna siatki, klasy niestabilne -> :has), żeby nie został pusty obszar. */
+html.acv-hide-transaction-ads div[data-box-name="Right [hidden for mobileapp]"],
+html.acv-hide-transaction-ads div:has(> div[data-box-name="Right [hidden for mobileapp]"]) {
+    display: none !important;
+}
+
+/* "Graj w Loterii Smart!" (klucz lottery): data-box-name="[transaction.container] allegro.transaction.thankyou.lottery"
+   (zewnętrzny box; wewnętrzny ma tę samą nazwę bez prefiksu). */
+html.acv-hide-transaction-lottery div[data-box-name="[transaction.container] allegro.transaction.thankyou.lottery"] {
+    display: none !important;
+}

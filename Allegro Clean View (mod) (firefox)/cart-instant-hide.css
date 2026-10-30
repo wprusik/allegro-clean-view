@@ -1,0 +1,12 @@
+/* Wczesne ukrywanie elementów w Koszyku (document_start), zanim
+   cart-content.js zdąży usunąć je z DOM - dzięki temu nie migają.
+   Klasy na <html> ustawia cart-content.js (synchronicznie na starcie,
+   potem korygowane wg zapisanych ustawień). */
+
+/* "Dorzuć do przesyłki!" (klucz addToShipment): cały kontener
+   div#crossSellCarousel (id występuje w kodzie strony jednokrotnie; w środku
+   data-box-name "cart.carousel" > "cart.cross-sell.slot" >
+   "cart.cross-sell.container" z nagłówkiem i karuzelą ofert). */
+html.acv-hide-cart-add-to-shipment div#crossSellCarousel {
+    display: none !important;
+}

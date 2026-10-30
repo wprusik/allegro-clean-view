@@ -1,0 +1,20 @@
+/* Wczesne ukrywanie elementów w sekcji "Moje zakupy" (document_start), zanim
+   my-purchases-content.js zdąży usunąć je z DOM - dzięki temu nie migają.
+   Klasy na <html> ustawia my-purchases-content.js (synchronicznie na starcie,
+   potem korygowane wg zapisanych ustawień). */
+
+/* Kafelki ze skrótami (klucz shortcutTiles): kontener data-testid="tiles". */
+html.acv-hide-my-purchases-shortcut-tiles div[data-testid="tiles"] {
+    display: none !important;
+}
+
+/* Cashback za zakupy (klucz cashbackBanner): baner Allegro Klik,
+   kontener data-box-name="myOrdersBoosters". */
+html.acv-hide-my-purchases-cashback-banner div[data-box-name="myOrdersBoosters"],
+/* Wrapper baneru (.opbox-sheet-wrapper > .opbox-sheet z inline margin-top:16px)
+   - bez tego po załadowaniu strony widać pusty odstęp, dopóki JS go nie usunie.
+   Zewnętrzny div.mryx_16 celowo ZOSTAJE: jego margin-bottom to jedyny odstęp
+   między zamówieniami po obu stronach baneru. */
+html.acv-hide-my-purchases-cashback-banner .opbox-sheet-wrapper:has(> .opbox-sheet > div[data-box-name="myOrdersBoosters"]) {
+    display: none !important;
+}

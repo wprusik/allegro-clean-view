@@ -1,0 +1,153 @@
+/* Wczesne ukrywanie elementów z sekcji "Różne" (document_start, wszystkie
+   strony allegro.pl), zanim misc-content.js zdąży je wykryć. Klasy na <html>
+   ustawia misc-content.js (synchronicznie na starcie, potem korygowane wg
+   zapisanych ustawień).
+
+   Elementy z tej sekcji powtarzają się w wielu miejscach serwisu (lista ofert
+   produktu, strony kategorii, strony użytkowników, panel "Inne oferty
+   produktu" na stronie oferty), dlatego nie należą do żadnej konkretnej strony.
+   Tylko CSS (bez usuwania z DOM) - to elementy list ofert zarządzanych przez
+   Reacta, a ponowne renderowanie listy (np. zmiana filtrów) mogłoby się
+   wysypać po ręcznym usunięciu węzła. */
+
+/* "Usługi Allegro" (klucz allegroServices): przypominajki o usługach Allegro
+   wstawiane jako <li> między oferty. Brak data-box-name, a klasy mają hash,
+   więc identyfikacja po stabilnym linku w środku (li > div > div > a):
+   - Gwarancja najniższej ceny: href zawiera "strefaokazji/gwarancja-ceny",
+   - Allegro Pay ("2 kupony po 50 zł..."): href zawiera "referer=LISTING_INFOBOX".
+   Kolejne warianty (inne usługi) - dopisać ich link do obu list poniżej
+   oraz do MISC_ALLEGRO_SERVICES_SELECTOR w misc-content.js. */
+html.acv-hide-misc-allegro-services li:has(> div > div > a[href*="strefaokazji/gwarancja-ceny"]),
+html.acv-hide-misc-allegro-services li:has(> div > div > a[href*="referer=LISTING_INFOBOX"]) {
+    display: none !important;
+}
+
+/* "Wybierz co dla Ciebie ważne" (klucz reviewsFilter): rozwijany panel filtra
+   opinii po cechach produktu (przycisk z ikonką iskier i etykietami cech).
+   Występuje przy opiniach: na stronie opinii (/oferty-produktu/.../opinie) i w
+   sekcji opinii na stronie produktu. Brak data-box-name, klasy z hashem -
+   identyfikacja po data-testid="featuresFilter" (1 raz w kodzie obu stron).
+   Cały kontener ma własne marginesy, więc po ukryciu nie zostaje odstęp. */
+html.acv-hide-misc-reviews-filter div[data-testid="featuresFilter"] {
+    display: none !important;
+}
+
+/* "Polecane w porównaniu" (klucz comparisonRecommended): kafelki produktów
+   oznaczone "Polecane" (zdjęcie, nazwa, cena, ocena, przycisk "Porównaj") w
+   nagłówku tabeli porównywarki (allegro.pl/porownanie); jest ich 1 lub 2.
+   Każdy to <th scope="col"> w <thead>; wariant z pionowym separatorem ma
+   ten sam kod, a separator to tylko dodatkowe klasy na tym samym <th>, więc
+   znika razem z nim. Brak data-box-name, klasy z hashem - identyfikacja po
+   przycisku data-analytics-interaction-label="addToComparison" (tylko w
+   kafelkach polecanych; porównywany produkt ma "Do koszyka" i kosz). Komórki
+   <td> pod nimi w tabeli są puste (aria-hidden), więc nic po nich nie zostaje. */
+html.acv-hide-misc-comparison-recommended th:has(button[data-analytics-interaction-label="addToComparison"]) {
+    display: none !important;
+}
+
+/* "Proponowane w wyszukiwarce" (klucz searchSuggestions): poziomy pasek
+   kafelków (zdjęcie + fraza, np. "żelazko parowe") na górze rozwiniętej listy
+   podpowiedzi po wpisaniu frazy w wyszukiwarkę. Lista to
+   div#suggestions-listbox[data-role="suggester"] (doklejana do DOM dopiero po
+   wpisaniu frazy), a karuzela to jej bezpośrednie dziecko
+   [data-role="carousel-component"]. Tekstowe podpowiedzi (a[data-role="suggestion"])
+   i ostatnie wyszukiwania zostają. */
+html.acv-hide-misc-search-suggestions div[data-role="suggester"] > div[data-role="carousel-component"] {
+    display: none !important;
+}
+
+/* "Oferty sponsorowane" (klucz sponsoredOffers): powtarzające się w listach
+   (kategoria, wyszukiwanie, oferty produktu) oferty z etykietą "Sponsorowane",
+   zwykle 2 na górze i 2 na dole listy. Każda to <li> w jednym <ul> z ofertami,
+   więc ukrycie nie zostawia pustych kontenerów. Rozpoznawane po DWÓCH znacznikach
+   naraz: link /events/clicks (przekierowanie reklamowe) i przycisk
+   aria-label="Sponsorowane ...". Oferty promowane ("Produkty promowane") mają
+   zwykłe linki /produkt/... i etykietę "Promowane", więc nie są ruszane.
+   Brak wspólnego data-box-name dla 3 typów stron, stąd selektor po <li>. */
+html.acv-hide-misc-sponsored-offers li:has(> article a[href*="/events/clicks"]):has(button[aria-label^="Sponsorowane"]) {
+    display: none !important;
+}
+
+/* "Reklama przy logowaniu" (klucz loginAd): baner Google 500x380 na stronie
+   allegro.pl/logowanie. Slot to div[data-prototype-id="allegro.advertisement.slot.banner"]
+   z data-analytics-groups zawierającym "loginAd" (data-box-name "banner - cmuid").
+   Ukrywamy sam slot, a osobną regułą także otaczający <section> (ma własne paddingi),
+   ALE tylko gdy slot jest w nim jedyną zawartością - gdyby w tej ramce pojawiły się
+   inne elementy, zostają widoczne. */
+html.acv-hide-misc-login-ad div[data-prototype-id="allegro.advertisement.slot.banner"][data-analytics-groups*="loginAd"],
+html.acv-hide-misc-login-ad section:has(> div:only-child > div[data-prototype-id="allegro.advertisement.slot.banner"][data-analytics-groups*="loginAd"]:only-child) {
+    display: none !important;
+}
+
+/* "Asystent Allegro" (klucz allegroAssistant): wysuwany przycisk "Zapytaj
+   Asystenta Allegro" przy krawędzi okna (otwiera panel czatu, który ładuje się
+   dopiero po kliknięciu - więc ukrywamy tylko przycisk). Kontener
+   data-box-name="allegro.chatbotAssistant.entrypoint" (1 raz w kodzie strony
+   produktu) zawiera wyłącznie ten przycisk (data-role=
+   "chatbot-assistant-entrypoint-trigger"). */
+html.acv-hide-misc-allegro-assistant div[data-box-name="allegro.chatbotAssistant.entrypoint"] {
+    display: none !important;
+}
+
+/* "Linki nad stopką" (klucz footerLinks): rozwijana (przyciskiem "Pokaż
+   więcej"/"Ukryj") lista linków SEO nad stopką. Cały blok to kontener
+   data-box-name="metrum-footer-partial-expander" - ta sama budowa na stronie
+   głównej, kategorii, użytkownika, ofertach produktu i stronie produktu (w
+   kodzie strony 1 raz). Właściwa stopka (data-box-name="f-links") zostaje. */
+html.acv-hide-misc-footer-links div[data-box-name="metrum-footer-partial-expander"],
+/* Drugi poziom, tylko w niektórych kategoriach (np. nieruchomości): dodatkowa
+   lista linków SEO ("Domy na sprzedaż Warszawa", ...) nad stopką. Unikalny
+   kontener zewnętrzny (1 raz na stronie), poza metrum-footer-partial-expander. */
+html.acv-hide-misc-footer-links div[data-box-name="seo-custom-navigation-links"] {
+    display: none !important;
+}
+
+/* "Stopka (ustawienia)" (klucz footerColumns): właściwa stopka - kolumny z
+   linkami (Allegro / Centrum pomocy / Serwisy), kolumna "Ustawienia
+   wyświetlania" i "Ustawienia lokalizacji" (motyw, kraj, język, waluta) oraz
+   ikony aplikacji i social media. Dwa kontenery obok siebie w
+   metrum-footer-seo-lazy, każdy 1 raz na stronie:
+   data-box-name="f-links" i data-box-name="f-social". Zostają: "Linki nad
+   stopką" (osobny checkbox) i "Serwisy Grupy Allegro" (metrum-footer-main).
+   UWAGA: ukrycie tego blokuje dostęp do zmiany motywu i kraju/języka/waluty
+   (okno allegro.modal otwierane z tej kolumny), stąd "(ustawienia)" w nazwie. */
+html.acv-hide-misc-footer-columns div[data-box-name="f-links"],
+html.acv-hide-misc-footer-columns div[data-box-name="f-social"] {
+    display: none !important;
+}
+
+/* Zastępnik leniwego ładowania górnej stopki: div allegro.spinner.metrum-footer
+   (data-placeholder-for wskazuje metrum-footer-seo-lazy, czyli "Linki nad stopką"
+   + f-links + f-social). Przed doładowaniem pokazuje spinner (czasem wisi na stałe,
+   gdy treść się nie dociągnie). Ukrywamy go TYLKO gdy włączone są oba checkboxy
+   ("Linki nad stopką" i "Stopka (ustawienia)"), bo wtedy cała ta treść i tak jest
+   niewidoczna; ukryty zastępnik prawdopodobnie nie wejdzie w pole widzenia, więc treść
+   w ogóle się nie doładuje. Przy jednym włączonym spinner zostaje, bo drugi element
+   ma się jeszcze załadować. */
+html.acv-hide-misc-footer-links.acv-hide-misc-footer-columns div[data-box-name="allegro.spinner.metrum-footer"] {
+    display: none !important;
+}
+
+/* "Reklama pod stopką" (klucz footerAd): duży baner reklamowy (Google Ad
+   Manager, komponent allegro.advertisement.slot.parallax) wstawiany na samym
+   końcu strony, POZA stopką w drzewie DOM (bezpośrednio w .main-wrapper), przez
+   co wizualnie wygląda jakby był "pod" nią - widoczny dopiero po przescrollowaniu
+   poniżej stopki. Ta sama budowa na stronach kategorii/listingów i na stronie
+   produktu (sprawdzone w kodach stron). Wariant dla NIEZALOGOWANEGO ma box name
+   "parallax cmuid"; selektor po data-prototype-id obejmuje oba. */
+html.acv-hide-misc-footer-ad div[data-box-name="parallax"],
+html.acv-hide-misc-footer-ad div[data-box-name="parallax cmuid"],
+html.acv-hide-misc-footer-ad div[data-prototype-id="allegro.advertisement.slot.parallax"] {
+    display: none !important;
+}
+
+/* "Reklama na górze głównej" (klucz mainTopAd): baner reklamowy (Allegro Ads,
+   miejsce emisji "Top Header") u samej góry strony głównej, nad nagłówkiem.
+   data-box-name="structure-container" jest ogólny (na stronie głównej występuje
+   ok. 25 razy, w tym przy karuzelach i kafelkach), dlatego węższy selektor po
+   grupie analitycznej miejsca emisji (data-analytics-groups zawiera "Top Header",
+   zapisane jako Top%20Header). Ukrywamy cały kontener (zawiera własny
+   opbox-sheet-wrapper), więc nie zostaje pusty odstęp. */
+html.acv-hide-misc-main-top-ad div[data-box-name="structure-container"][data-analytics-groups*="Top%20Header"] {
+    display: none !important;
+}
