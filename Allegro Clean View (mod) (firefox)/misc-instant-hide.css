@@ -18,7 +18,10 @@
    Kolejne warianty (inne usługi) - dopisać ich link do obu list poniżej
    oraz do MISC_ALLEGRO_SERVICES_SELECTOR w misc-content.js. */
 html.acv-hide-misc-allegro-services li:has(> div > div > a[href*="strefaokazji/gwarancja-ceny"]),
-html.acv-hide-misc-allegro-services li:has(> div > div > a[href*="referer=LISTING_INFOBOX"]) {
+html.acv-hide-misc-allegro-services li:has(> div > div > a[href*="referer=LISTING_INFOBOX"]),
+/* Allegro Klik ("Zyskaj do 5% cashbacku...", kategorie i oferty produktu): ten sam
+   typ przypominajki, ale Allegro zmieniło nazwę parametru (referrer=SALES_LISTING_INFOBOX_...). */
+html.acv-hide-misc-allegro-services li:has(> div > div > a[href*="referrer=SALES_LISTING_INFOBOX"]) {
     display: none !important;
 }
 
@@ -51,8 +54,11 @@ html.acv-hide-misc-comparison-recommended th:has(button[data-analytics-interacti
    div#suggestions-listbox[data-role="suggester"] (doklejana do DOM dopiero po
    wpisaniu frazy), a karuzela to jej bezpośrednie dziecko
    [data-role="carousel-component"]. Tekstowe podpowiedzi (a[data-role="suggestion"])
-   i ostatnie wyszukiwania zostają. */
-html.acv-hide-misc-search-suggestions div[data-role="suggester"] > div[data-role="carousel-component"] {
+   i ostatnie wyszukiwania zostają. Ukrywana jest też sponsorowana podpowiedź
+   tekstowa (a[data-role="suggestion"] z etykietą "Sponsorowane" i przyciskiem
+   [data-role="suggestion-dsa-button"] - tylko reklamowa ją ma). */
+html.acv-hide-misc-search-suggestions div[data-role="suggester"] > div[data-role="carousel-component"],
+html.acv-hide-misc-search-suggestions div[data-role="suggester"] a[data-role="suggestion"]:has([data-role="suggestion-dsa-button"]) {
     display: none !important;
 }
 
@@ -65,6 +71,15 @@ html.acv-hide-misc-search-suggestions div[data-role="suggester"] > div[data-role
    zwykłe linki /produkt/... i etykietę "Promowane", więc nie są ruszane.
    Brak wspólnego data-box-name dla 3 typów stron, stąd selektor po <li>. */
 html.acv-hide-misc-sponsored-offers li:has(> article a[href*="/events/clicks"]):has(button[aria-label^="Sponsorowane"]) {
+    display: none !important;
+}
+
+/* "Inne produkty sprzedającego" (klucz sellerOtherProducts): karuzela w wysuwanym
+   panelu "O sprzedającym" na stronie produktu, między "Sprzedający" a "Dane firmy".
+   Cały blok to <section> (h4 + karuzela) o klasach z hashem, więc celujemy w niego
+   przez unikalny data-box-name karuzeli (1 raz w kodzie strony). Panel ładuje się
+   dynamicznie - CSS działa też na elementy dodane później. */
+html.acv-hide-misc-seller-other-products section:has(> div > div[data-box-name="Carousel_reco_same_seller_about-seller"]) {
     display: none !important;
 }
 
@@ -148,6 +163,11 @@ html.acv-hide-misc-footer-ad div[data-prototype-id="allegro.advertisement.slot.p
    grupie analitycznej miejsca emisji (data-analytics-groups zawiera "Top Header",
    zapisane jako Top%20Header). Ukrywamy cały kontener (zawiera własny
    opbox-sheet-wrapper), więc nie zostaje pusty odstęp. */
-html.acv-hide-misc-main-top-ad div[data-box-name="structure-container"][data-analytics-groups*="Top%20Header"] {
+html.acv-hide-misc-main-top-ad div[data-box-name="structure-container"][data-analytics-groups*="Top%20Header"],
+/* Nowszy wariant tego samego miejsca emisji: sam baner DSS bez kontenera
+   structure-container (box allegro.ads.dss.banner.topHeader, w opbox-sheet strony
+   głównej obok adblockDetector i metrumHeader). Sam baner nie ma marginesów, więc
+   ukrycie go nie zostawia odstępu. */
+html.acv-hide-misc-main-top-ad div[data-box-name="allegro.ads.dss.banner.topHeader"] {
     display: none !important;
 }

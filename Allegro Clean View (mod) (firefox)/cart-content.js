@@ -1,10 +1,12 @@
 const DEFAULT_CART_SECTIONS = {
-    addToShipment: true
+    addToShipment: true,
+    charityBox: true
 };
 
 // Klasy na <html> sterujące wczesnym CSS (cart-instant-hide.css).
 const ACV_CART_CSS_CLASSES = {
-    addToShipment: "acv-hide-cart-add-to-shipment"
+    addToShipment: "acv-hide-cart-add-to-shipment",
+    charityBox: "acv-hide-cart-charity-box"
 };
 
 function _acvApplyCartClasses(sections) {
@@ -76,9 +78,20 @@ function removeAddToShipment() {
     return els.length > 0;
 }
 
+// "Szlachetna Paczka": panel z prośbą o 10 zł, root to div z
+// data-analytics-view-label="cartCharityBox" (1 raz w kodzie strony).
+function removeCharityBox() {
+    const els = document.querySelectorAll('div[data-analytics-view-label="cartCharityBox"]');
+    els.forEach((el) => el.remove());
+    return els.length > 0;
+}
+
 function applyCartSections(sections) {
     if (sections.addToShipment && removeAddToShipment()) {
         acvCartAppliedSections.add('addToShipment');
+    }
+    if (sections.charityBox && removeCharityBox()) {
+        acvCartAppliedSections.add('charityBox');
     }
 }
 
@@ -112,7 +125,7 @@ function whenCartPageLoaded() {
 
     const config = await getCartConfig();
     if (!config.enabled) {
-        _acvApplyCartClasses({ addToShipment: false });
+        _acvApplyCartClasses({ addToShipment: false, charityBox: false });
         return;
     }
     _acvApplyCartClasses(config.sections);

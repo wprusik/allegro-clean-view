@@ -11,9 +11,11 @@ const DEFAULT_PRODUCT_SECTIONS = {
     lastViewed: true,
     inspiredBySearches: true,
     allegroPayCoupons: true,
+    blackWeeksBanner: true,
     askOnPage: true,
     descriptionExpanded: true,
     brandInfo: true,
+    precartOffers: true,
     upsellAiSuggestion: true,
     productSurvey: true,
     infiniteFeed: true,
@@ -38,9 +40,11 @@ const PRODUCT_SECTION_CHECKBOXES = {
     lastViewed: "setting-product-last-viewed",
     inspiredBySearches: "setting-product-inspired-by-searches",
     allegroPayCoupons: "setting-product-allegro-pay-coupons",
+    blackWeeksBanner: "setting-product-black-weeks-banner",
     askOnPage: "setting-product-ask-on-page",
     descriptionExpanded: "setting-product-description-expanded",
     brandInfo: "setting-product-brand-info",
+    precartOffers: "setting-product-precart-offers",
     upsellAiSuggestion: "setting-product-upsell-ai-suggestion",
     productSurvey: "setting-product-survey",
     infiniteFeed: "setting-product-infinite-feed",
@@ -77,11 +81,13 @@ const TRANSACTION_SECTION_CHECKBOXES = {
 };
 
 const DEFAULT_CART_SECTIONS = {
-    addToShipment: true
+    addToShipment: true,
+    charityBox: true
 };
 
 const CART_SECTION_CHECKBOXES = {
-    addToShipment: "setting-cart-add-to-shipment"
+    addToShipment: "setting-cart-add-to-shipment",
+    charityBox: "setting-cart-charity-box"
 };
 
 const DEFAULT_LISTING_SECTIONS = {
@@ -139,6 +145,7 @@ const DEFAULT_MISC_SECTIONS = {
     sponsoredOffers: true,
     loginAd: true,
     allegroServices: true,
+    sellerOtherProducts: true,
     reviewsFilter: true,
     comparisonRecommended: true,
     allegroAssistant: true,
@@ -153,6 +160,7 @@ const MISC_SECTION_CHECKBOXES = {
     sponsoredOffers: "setting-misc-sponsored-offers",
     loginAd: "setting-misc-login-ad",
     allegroServices: "setting-misc-allegro-services",
+    sellerOtherProducts: "setting-misc-seller-other-products",
     reviewsFilter: "setting-misc-reviews-filter",
     comparisonRecommended: "setting-misc-comparison-recommended",
     allegroAssistant: "setting-misc-allegro-assistant",

@@ -3,6 +3,7 @@ const DEFAULT_MISC_SECTIONS = {
     sponsoredOffers: true,
     loginAd: true,
     allegroServices: true,
+    sellerOtherProducts: true,
     reviewsFilter: true,
     comparisonRecommended: true,
     allegroAssistant: true,
@@ -18,6 +19,7 @@ const ACV_MISC_CSS_CLASSES = {
     sponsoredOffers: "acv-hide-misc-sponsored-offers",
     loginAd: "acv-hide-misc-login-ad",
     allegroServices: "acv-hide-misc-allegro-services",
+    sellerOtherProducts: "acv-hide-misc-seller-other-products",
     reviewsFilter: "acv-hide-misc-reviews-filter",
     comparisonRecommended: "acv-hide-misc-comparison-recommended",
     allegroAssistant: "acv-hide-misc-allegro-assistant",
@@ -31,7 +33,8 @@ const ACV_MISC_CSS_CLASSES = {
 // wykrycia, czy element faktycznie jest na stronie (pogrubienie pozycji w popupie).
 const MISC_ALLEGRO_SERVICES_SELECTOR = [
     'li:has(> div > div > a[href*="strefaokazji/gwarancja-ceny"])',
-    'li:has(> div > div > a[href*="referer=LISTING_INFOBOX"])'
+    'li:has(> div > div > a[href*="referer=LISTING_INFOBOX"])',
+    'li:has(> div > div > a[href*="referrer=SALES_LISTING_INFOBOX"])'
 ].join(", ");
 
 // Wybierz, co dla Ciebie ważne: panel filtra opinii po cechach (przycisk
@@ -49,13 +52,22 @@ const MISC_COMPARISON_RECOMMENDED_SELECTOR = 'th:has(button[data-analytics-inter
 // Proponowane w wyszukiwarce: karuzela kafelków (zdjęcie + fraza) na górze
 // rozwiniętej listy podpowiedzi wyszukiwarki (#suggestions-listbox, data-role="suggester").
 // Lista jest doklejana do DOM dopiero po wpisaniu frazy (obserwator niżej to łapie).
-const MISC_SEARCH_SUGGESTIONS_SELECTOR = 'div[data-role="suggester"] > div[data-role="carousel-component"]';
+// Obejmuje też sponsorowaną podpowiedź tekstową (a[data-role="suggestion"] z etykietą
+// "Sponsorowane" i przyciskiem data-role="suggestion-dsa-button"; zwykłe podpowiedzi go nie mają).
+const MISC_SEARCH_SUGGESTIONS_SELECTOR = [
+    'div[data-role="suggester"] > div[data-role="carousel-component"]',
+    'div[data-role="suggester"] a[data-role="suggestion"]:has([data-role="suggestion-dsa-button"])'
+].join(', ');
 
 // Oferty sponsorowane w listach (kategoria, wyszukiwanie, oferty produktu): <li>
 // z linkiem przekierowania reklamowego (/events/clicks) ORAZ etykietą
 // "Sponsorowane". Oba znaczniki naraz, żeby nie trafić w oferty promowane
 // ("Produkty promowane", zwykłe linki /produkt/...) ani zwykłe.
 const MISC_SPONSORED_OFFERS_SELECTOR = 'li:has(> article a[href*="/events/clicks"]):has(button[aria-label^="Sponsorowane"])';
+
+// "Inne produkty sprzedającego" w panelu "O sprzedającym" (strona produktu): <section>
+// z h4 i karuzelą; stabilny jest tylko data-box-name karuzeli (klasy z hashem).
+const MISC_SELLER_OTHER_PRODUCTS_SELECTOR = 'section:has(> div > div[data-box-name="Carousel_reco_same_seller_about-seller"])';
 
 // Reklama przy logowaniu (allegro.pl/logowanie): baner Google w polu pod formularzem,
 // slot allegro.advertisement.slot.banner z analytics-groups "loginAd".
@@ -85,7 +97,9 @@ const MISC_FOOTER_COLUMNS_SELECTOR = 'div[data-box-name="f-links"], div[data-box
 // "structure-container" to ogólna nazwa używana ~25 razy na stronie głównej, więc
 // identyfikacja po grupie analitycznej miejsca emisji "Top Header" (nie po
 // kampanii, która się zmienia).
-const MISC_MAIN_TOP_AD_SELECTOR = 'div[data-box-name="structure-container"][data-analytics-groups*="Top%20Header"]';
+// Nowszy wariant: sam baner DSS bez kontenera structure-container (box
+// allegro.ads.dss.banner.topHeader, bezpośrednio w opbox-sheet strony głównej).
+const MISC_MAIN_TOP_AD_SELECTOR = 'div[data-box-name="structure-container"][data-analytics-groups*="Top%20Header"], div[data-box-name="allegro.ads.dss.banner.topHeader"]';
 
 const MISC_FOOTER_AD_SELECTOR = 'div[data-box-name="parallax"], div[data-box-name="parallax cmuid"], div[data-prototype-id="allegro.advertisement.slot.parallax"]';
 
@@ -195,6 +209,9 @@ function reportMiscAppliedSections(sections) {
     if (sections.allegroServices && document.querySelector(MISC_ALLEGRO_SERVICES_SELECTOR)) {
         applied.push("allegroServices");
     }
+    if (sections.sellerOtherProducts && document.querySelector(MISC_SELLER_OTHER_PRODUCTS_SELECTOR)) {
+        applied.push("sellerOtherProducts");
+    }
     if (sections.reviewsFilter && document.querySelector(MISC_REVIEWS_FILTER_SELECTOR)) {
         applied.push("reviewsFilter");
     }
@@ -269,7 +286,7 @@ function whenMiscPageLoaded() {
     const config = await getMiscConfig();
     acvApplyDefaultSort(config.sort);
     if (!config.enabled) {
-        _acvApplyMiscClasses({ searchSuggestions: false, sponsoredOffers: false, loginAd: false, allegroServices: false, reviewsFilter: false, comparisonRecommended: false, allegroAssistant: false, footerLinks: false, footerColumns: false, footerAd: false, mainTopAd: false });
+        _acvApplyMiscClasses({ searchSuggestions: false, sponsoredOffers: false, loginAd: false, allegroServices: false, sellerOtherProducts: false, reviewsFilter: false, comparisonRecommended: false, allegroAssistant: false, footerLinks: false, footerColumns: false, footerAd: false, mainTopAd: false });
         return;
     }
     _acvApplyMiscClasses(config.sections);

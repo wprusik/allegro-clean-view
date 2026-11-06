@@ -51,9 +51,11 @@ const DEFAULT_SETTINGS = {
         lastViewed: true,
         inspiredBySearches: true,
         allegroPayCoupons: true,
+        blackWeeksBanner: true,
         askOnPage: true,
         descriptionExpanded: true,
         brandInfo: true,
+        precartOffers: true,
         upsellAiSuggestion: true,
         productSurvey: true,
         infiniteFeed: true,
@@ -76,7 +78,8 @@ const DEFAULT_SETTINGS = {
         infiniteFeed: true
     },
     cartSections: {
-        addToShipment: true
+        addToShipment: true,
+        charityBox: true
     },
     favoritesSections: {
         combineOffersProposal: true,
@@ -88,6 +91,7 @@ const DEFAULT_SETTINGS = {
         sponsoredOffers: true,
         loginAd: true,
         allegroServices: true,
+        sellerOtherProducts: true,
         reviewsFilter: true,
         comparisonRecommended: true,
         allegroAssistant: true,
