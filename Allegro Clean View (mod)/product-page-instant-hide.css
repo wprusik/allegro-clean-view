@@ -92,6 +92,27 @@ html.acv-hide-allegro-pay-coupons div[data-box-name="allegroPay container"] {
     display: none !important;
 }
 
+/* Sterowane checkboxem "Baner Black Weeks" (blackWeeksBanner).
+   Poziomy baner (720x80) z okazjami Black Friday/Black Weeks nad treścią oferty.
+   Zewnętrzny kontener (layout.container) data-box-name="black.weeks.deals.banner"
+   zawiera wrapper z marginesem i zagnieżdżone boksy ".pl" - ukrywamy cały kontener,
+   żeby nie został pusty odstęp. Nazwa boksu może zmienić się przy kolejnej edycji akcji. */
+html.acv-hide-black-weeks-banner div[data-box-name="black.weeks.deals.banner"] {
+    display: none !important;
+}
+
+/* Sterowane checkboxem "Dobierz do koszyka" (precartOffers).
+   Lista ofert w oknie wyskakującym po dodaniu produktu do koszyka (np. pod
+   "Dobierz, aby mieć darmową dostawę" z paskiem postępu, nad "Więcej od tego
+   sprzedawcy"). Zewnętrzny kontener data-box-name=
+   "precart-layer-recommendations-offers-container" (1 raz w kodzie strony)
+   zawiera całą siatkę ofert (precart-layer-gallery-view-only-reco). Nagłówek
+   i pasek darmowej dostawy są poza nim i zostają. Okno ładuje się dynamicznie
+   po kliknięciu "Dodaj do koszyka" - CSS obejmuje elementy dodane później. */
+html.acv-hide-precart-offers div[data-box-name="precart-layer-recommendations-offers-container"] {
+    display: none !important;
+}
+
 /* Sterowane checkboxem "Zapytaj o ten produkt" (askOnPage).
    Panel z polem do zadania pytania AI o produkt (funkcja "Beta").
    Kontener data-box-name="allegro.ask.on.page.container.above" (wcześniej)

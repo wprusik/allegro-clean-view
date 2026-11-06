@@ -10,3 +10,10 @@
 html.acv-hide-cart-add-to-shipment div#crossSellCarousel {
     display: none !important;
 }
+
+/* "Szlachetna Paczka" (klucz charityBox): panel "Przekaż 10 zł dla Szlachetnej
+   Paczki" z przyciskiem "Wesprzyj". Root to div z
+   data-analytics-view-label="cartCharityBox" (1 raz w kodzie strony). */
+html.acv-hide-cart-charity-box div[data-analytics-view-label="cartCharityBox"] {
+    display: none !important;
+}

@@ -8,8 +8,10 @@ const ACV_INSTANT_HIDE_CSS_CLASSES = {
     othersAlsoViewed: "acv-hide-others-also-viewed",
     ourProductSeries: "acv-hide-our-product-series",
     allegroPayCoupons: "acv-hide-allegro-pay-coupons",
+    blackWeeksBanner: "acv-hide-black-weeks-banner",
     askOnPage: "acv-hide-ask-on-page",
     brandInfo: "acv-hide-brand-info",
+    precartOffers: "acv-hide-precart-offers",
     upsellAiSuggestion: "acv-hide-upsell-ai-suggestion",
     productSurvey: "acv-hide-product-survey",
     infiniteFeed: "acv-hide-infinite-feed",
@@ -39,7 +41,7 @@ function _acvApplyInstantHideClasses(sections) {
 // i tak używa się wartości domyślnych - true). Jeśli faktyczny zapisany
 // config różni się od domyślnych wartości, klasy są korygowane w IIFE na
 // końcu pliku zaraz po odczycie configu.
-_acvApplyInstantHideClasses({ disableGalleryHover: false, othersAlsoViewed: true, ourProductSeries: true, allegroPayCoupons: true, askOnPage: true, brandInfo: true, upsellAiSuggestion: true, productSurvey: true, infiniteFeed: true, ads: true, lokalnieOffers: true, endedOfferReco: true, recommendedProducts: true });
+_acvApplyInstantHideClasses({ disableGalleryHover: false, othersAlsoViewed: true, ourProductSeries: true, allegroPayCoupons: true, blackWeeksBanner: true, askOnPage: true, brandInfo: true, precartOffers: true, upsellAiSuggestion: true, productSurvey: true, infiniteFeed: true, ads: true, lokalnieOffers: true, endedOfferReco: true, recommendedProducts: true });
 
 function findElementByTagNameAndText(tagName, text) {
     const el = [...document.getElementsByTagName(tagName)]
@@ -60,9 +62,11 @@ const DEFAULT_PRODUCT_SECTIONS = {
     lastViewed: true,
     inspiredBySearches: true,
     allegroPayCoupons: true,
+    blackWeeksBanner: true,
     askOnPage: true,
     descriptionExpanded: true,
     brandInfo: true,
+    precartOffers: true,
     upsellAiSuggestion: true,
     productSurvey: true,
     infiniteFeed: true,
@@ -815,6 +819,12 @@ function removeAds(sectionSettings) {
     if (sections.allegroPayCoupons && document.querySelector('div[data-box-name="allegroPay container"]')) {
         applied.add('allegroPayCoupons');
     }
+    if (sections.blackWeeksBanner && document.querySelector('div[data-box-name="black.weeks.deals.banner"]')) {
+        applied.add('blackWeeksBanner');
+    }
+    if (sections.precartOffers && document.querySelector('div[data-box-name="precart-layer-recommendations-offers-container"]')) {
+        applied.add('precartOffers');
+    }
     if (sections.askOnPage && document.querySelector('div[data-box-name^="allegro.ask.on.page.container"]')) {
         applied.add('askOnPage');
     }
@@ -1065,7 +1075,9 @@ const ACV_OUTDATED_PAGE_SECTION_KEYS = new Set([
     // Zachowanie galerii (nie ukrywanie): tu tylko znacznik do pogrubienia w popupie.
     'disableGalleryHover',
     // Ukrywane CSS-em; tu tylko wykrycie elementu (pogrubienie w popupie).
-    'allegroPayCoupons'
+    'allegroPayCoupons',
+    'blackWeeksBanner',
+    'precartOffers'
 ]);
 
 function restoreOutdatedLook(sectionSettings) {
