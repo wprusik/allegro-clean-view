@@ -1,14 +1,16 @@
 const DEFAULT_PRODUCT_OFFERS_SECTIONS = {
     sponsoredBrand: true,
     officialStore: true,
-    similarOffers: true
+    similarOffers: true,
+    precartOffers: true
 };
 
 // Klasy na <html> sterujące wczesnym CSS (product-offers-instant-hide.css).
 const ACV_PRODUCT_OFFERS_CSS_CLASSES = {
     sponsoredBrand: "acv-hide-product-offers-sponsored-brand",
     officialStore: "acv-hide-product-offers-official-store",
-    similarOffers: "acv-hide-product-offers-similar-offers"
+    similarOffers: "acv-hide-product-offers-similar-offers",
+    precartOffers: "acv-hide-product-offers-precart-offers"
 };
 
 function _acvApplyProductOffersClasses(sections) {
@@ -98,6 +100,13 @@ function removeSimilarOffers() {
     return els.length > 0;
 }
 
+// Dodaj do przesyłki: lista ofert w oknie po dodaniu do koszyka (box
+// precart-layer-recommendations-offers-container). Ukrywa ją wyłącznie CSS (okno jest
+// ładowane dynamicznie, nie ruszamy DOM); tu tylko wykrycie do pogrubienia w popupie.
+function detectPrecartOffers() {
+    return !!document.querySelector('div[data-box-name="precart-layer-recommendations-offers-container"]');
+}
+
 function applyProductOffersSections(sections) {
     if (sections.sponsoredBrand) {
         if (removeSponsoredBrand()) acvProductOffersAppliedSections.add('sponsoredBrand');
@@ -107,6 +116,9 @@ function applyProductOffersSections(sections) {
     }
     if (sections.similarOffers) {
         if (removeSimilarOffers()) acvProductOffersAppliedSections.add('similarOffers');
+    }
+    if (sections.precartOffers) {
+        if (detectPrecartOffers()) acvProductOffersAppliedSections.add('precartOffers');
     }
 }
 
@@ -141,7 +153,7 @@ function whenPageLoaded() {
 
     const config = await getProductOffersConfig();
     if (!config.enabled) {
-        _acvApplyProductOffersClasses({ sponsoredBrand: false, officialStore: false, similarOffers: false });
+        _acvApplyProductOffersClasses({ sponsoredBrand: false, officialStore: false, similarOffers: false, precartOffers: false });
         return;
     }
     _acvApplyProductOffersClasses(config.sections);

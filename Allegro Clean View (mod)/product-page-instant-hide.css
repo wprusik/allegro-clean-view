@@ -101,7 +101,7 @@ html.acv-hide-black-weeks-banner div[data-box-name="black.weeks.deals.banner"] {
     display: none !important;
 }
 
-/* Sterowane checkboxem "Dobierz do koszyka" (precartOffers).
+/* Sterowane checkboxem "Dodaj do przesyłki" (precartOffers).
    Lista ofert w oknie wyskakującym po dodaniu produktu do koszyka (np. pod
    "Dobierz, aby mieć darmową dostawę" z paskiem postępu, nad "Więcej od tego
    sprzedawcy"). Zewnętrzny kontener data-box-name=
@@ -109,7 +109,13 @@ html.acv-hide-black-weeks-banner div[data-box-name="black.weeks.deals.banner"] {
    zawiera całą siatkę ofert (precart-layer-gallery-view-only-reco). Nagłówek
    i pasek darmowej dostawy są poza nim i zostają. Okno ładuje się dynamicznie
    po kliknięciu "Dodaj do koszyka" - CSS obejmuje elementy dodane później. */
-html.acv-hide-precart-offers div[data-box-name="precart-layer-recommendations-offers-container"] {
+html.acv-hide-precart-offers div[data-box-name="precart-layer-recommendations-offers-container"],
+/* Wariant okna z nagłówkiem "Dodaj do tej samej przesyłki" (pasek postępu
+   allegro.cart.benefitProgressBar): siatka ofert to osobny boks
+   precart-layer-fulfilment-recommendations-gallery-view (1 raz na stronie),
+   rodzeństwo paska postępu w precart-layer-fulfilment-recommendations-container.
+   Ukrywamy tylko siatkę - nagłówek i pasek zostają, jak w wariancie powyżej. */
+html.acv-hide-precart-offers div[data-box-name="precart-layer-fulfilment-recommendations-gallery-view"] {
     display: none !important;
 }
 
@@ -230,8 +236,12 @@ html.acv-disable-gallery-zoom div[data-box-name="showoffer.gallery"]:not(:has(bu
    (data-role="replaceable-title" - tytuł bywa podmieniany w eksperymentach,
    dlatego nie szukamy go po tekście). Najbardziej zewnętrzny kontener
    div[data-box-name="tabs_bpg_novelty_container"] (1 raz na stronie) obejmuje
-   cały blok z marginesami, więc po ukryciu nie zostaje odstęp. */
-html.acv-hide-recommended-products div[data-box-name="tabs_bpg_novelty_container"] {
+   cały blok z marginesami, więc po ukryciu nie zostaje odstęp.
+   Allegro podmienia kontener w eksperymentach/kampaniach: wariant
+   "tabs_campaign_bpg_container" (tytuł tabs_campaign_bpg_title, zakładki
+   soap_campaign_bpg_lazy) ma tę samą rolę i też występuje 1 raz na stronie. */
+html.acv-hide-recommended-products div[data-box-name="tabs_bpg_novelty_container"],
+html.acv-hide-recommended-products div[data-box-name="tabs_campaign_bpg_container"] {
     display: none !important;
 }
 

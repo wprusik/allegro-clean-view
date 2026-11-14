@@ -29,6 +29,7 @@ const DEFAULT_SETTINGS = {
         aiSuggestions: true,
         relatedLinks: true,
         similarPhrases: true,
+        precartOffers: true,
         advice: true,
         dealsZone: true,
         top10: true
@@ -36,7 +37,8 @@ const DEFAULT_SETTINGS = {
     productOffersSections: {
         sponsoredBrand: true,
         officialStore: true,
-        similarOffers: true
+        similarOffers: true,
+        precartOffers: true
     },
     productSections: {
         disableGalleryHover: false,

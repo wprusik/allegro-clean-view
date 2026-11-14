@@ -76,6 +76,17 @@ html.acv-hide-listing-similar-phrases div[data-box-name="didYouMean"] {
     display: none !important;
 }
 
+/* "Dodaj do przesyłki" (klucz precartOffers): lista ofert w oknie po dodaniu do
+   koszyka (kategoria i wyszukiwanie). Ukrywamy tylko same oferty - kontener
+   precart-layer-recommendations-offers-container; nagłówek "Dodaj do tej samej
+   przesyłki", "Darmowa dostawa" i pasek postępu (allegro.cart.benefitProgressBar)
+   są poza nim i zostają. Drugi selektor to starszy wariant okna (siatka
+   fulfilment-recommendations-gallery-view). Okno ładuje się dynamicznie; tylko CSS. */
+html.acv-hide-listing-precart-offers div[data-box-name="precart-layer-recommendations-offers-container"],
+html.acv-hide-listing-precart-offers div[data-box-name="precart-layer-fulfilment-recommendations-gallery-view"] {
+    display: none !important;
+}
+
 /* "Porady" (klucz advice): długi tekst SEO (rozwijany przyciskiem
    "więcej"/"mniej") na dole strony kategorii. Tylko na kategorii
    (data-box-name="seo text container"), nie istnieje na wyszukiwaniu. */

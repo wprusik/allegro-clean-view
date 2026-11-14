@@ -6,6 +6,7 @@ const DEFAULT_LISTING_SECTIONS = {
     aiSuggestions: true,
     relatedLinks: true,
     similarPhrases: true,
+    precartOffers: true,
     advice: true,
     dealsZone: true,
     top10: true
@@ -20,6 +21,7 @@ const ACV_LISTING_CSS_CLASSES = {
     aiSuggestions: "acv-hide-listing-ai-suggestions",
     relatedLinks: "acv-hide-listing-related-links",
     similarPhrases: "acv-hide-listing-similar-phrases",
+    precartOffers: "acv-hide-listing-precart-offers",
     advice: "acv-hide-listing-advice",
     dealsZone: "acv-hide-listing-deals-zone",
     top10: "acv-hide-listing-top10"
@@ -56,6 +58,14 @@ const LISTING_SPONSORED_BELOW_FILTERS_SELECTOR = 'div[data-box-name="seoLazyBelo
 const LISTING_DEALS_ZONE_SELECTOR = 'li:has(> div > p > a[href*="/strefaokazji/dzial/"])';
 
 const LISTING_TOP10_SELECTOR = 'div[data-box-name="Ranking Wrapper"]';
+// "Dodaj do przesyłki": lista ofert w oknie po dodaniu do koszyka. Ukrywamy tylko
+// same oferty (kategoria i wyszukiwanie); nagłówek "Dodaj do tej samej przesyłki",
+// "Darmowa dostawa" i pasek postępu zostają. Drugi selektor to starszy wariant okna.
+const LISTING_PRECART_OFFERS_SELECTOR = [
+    'div[data-box-name="precart-layer-recommendations-offers-container"]',
+    'div[data-box-name="precart-layer-fulfilment-recommendations-gallery-view"]'
+].join(', ');
+
 const LISTING_ADVICE_SELECTOR = 'div[data-box-name="seo text container"]';
 
 const LISTING_SIMILAR_PHRASES_SELECTOR = 'div[data-box-name="didYouMean"]';
@@ -150,6 +160,9 @@ function reportListingAppliedSections(sections) {
     if (sections.similarPhrases && document.querySelector(LISTING_SIMILAR_PHRASES_SELECTOR)) {
         applied.push("similarPhrases");
     }
+    if (sections.precartOffers && document.querySelector(LISTING_PRECART_OFFERS_SELECTOR)) {
+        applied.push("precartOffers");
+    }
     if (sections.advice && document.querySelector(LISTING_ADVICE_SELECTOR)) {
         applied.push("advice");
     }
@@ -207,7 +220,7 @@ function whenListingPageLoaded() {
 
     const config = await getListingConfig();
     if (!config.enabled) {
-        _acvApplyListingClasses({ recommendations: false, articles: false, sponsoredBelowFilters: false, sponsoredPanels: false, aiSuggestions: false, relatedLinks: false, similarPhrases: false, advice: false, dealsZone: false, top10: false });
+        _acvApplyListingClasses({ recommendations: false, articles: false, sponsoredBelowFilters: false, sponsoredPanels: false, aiSuggestions: false, relatedLinks: false, similarPhrases: false, precartOffers: false, advice: false, dealsZone: false, top10: false });
         return;
     }
     _acvApplyListingClasses(config.sections);

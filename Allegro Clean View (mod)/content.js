@@ -822,7 +822,7 @@ function removeAds(sectionSettings) {
     if (sections.blackWeeksBanner && document.querySelector('div[data-box-name="black.weeks.deals.banner"]')) {
         applied.add('blackWeeksBanner');
     }
-    if (sections.precartOffers && document.querySelector('div[data-box-name="precart-layer-recommendations-offers-container"]')) {
+    if (sections.precartOffers && document.querySelector('div[data-box-name="precart-layer-recommendations-offers-container"], div[data-box-name="precart-layer-fulfilment-recommendations-gallery-view"]')) {
         applied.add('precartOffers');
     }
     if (sections.askOnPage && document.querySelector('div[data-box-name^="allegro.ask.on.page.container"]')) {
@@ -850,7 +850,7 @@ function removeAds(sectionSettings) {
     if (sections.disableGalleryHover && window.__acvGalleryHoverDisabled) {
         applied.add('disableGalleryHover');
     }
-    if (sections.recommendedProducts && document.querySelector('div[data-box-name="tabs_bpg_novelty_container"]')) {
+    if (sections.recommendedProducts && document.querySelector('div[data-box-name="tabs_bpg_novelty_container"], div[data-box-name="tabs_campaign_bpg_container"]')) {
         applied.add('recommendedProducts');
     }
     if (sections.endedOfferReco && document.querySelector('div[data-box-name="Container carousel reco ended"], div[data-box-name^="Container carousel_reco_ended"]')) {

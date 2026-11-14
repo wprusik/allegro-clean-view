@@ -139,6 +139,12 @@ function removeEmptyOpboxWrappers() {
         let removedAny = false;
 
         wrappers.forEach((wrapper) => {
+            // Okna modalne (np. "Udostępnij ofertę" w Szczegółach zakupu) są ładowane
+            // leniwie: wrapper pojawia się pusty, a treść dochodzi chwilę później.
+            // Usunięcie go w tym momencie kasowało okno - dlatego pomijamy modale
+            // i kontenery "Lazy".
+            if (wrapper.closest('[data-role="modal-body"], [data-role="modal-content-container"], [role="dialog"], [data-box-name*="Lazy"]')) return;
+
             const hasText = (wrapper.textContent || '').trim().length > 0;
             if (hasText) return;
 

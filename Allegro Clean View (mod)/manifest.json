@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Allegro Clean View (mod)",
-  "version": "2.2",
+  "version": "2.3",
   "description": "Ukrywa zbędne elementy i dodaje przydatne funkcje na stronach Allegro",
   "permissions": [
     "storage",

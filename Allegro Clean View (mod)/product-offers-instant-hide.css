@@ -22,6 +22,14 @@ html.acv-hide-product-offers-official-store li:has(> div a[title="ZOBACZ SKLEP M
     display: none !important;
 }
 
+/* "Dodaj do przesyłki" (klucz precartOffers): lista ofert w oknie po dodaniu do
+   koszyka (kontener data-box-name="precart-layer-recommendations-offers-container",
+   1 raz w kodzie strony). Nagłówek "Dodaj do tej samej przesyłki" i pasek postępu
+   są w osobnym boksie (allegro.cart.benefitProgressBar) i zostają. */
+html.acv-hide-product-offers-precart-offers div[data-box-name="precart-layer-recommendations-offers-container"] {
+    display: none !important;
+}
+
 /* "Podobne oferty" (klucz similarOffers): karuzela z tytułem h3 "Podobne oferty"
    pod listą ofert. Cały blok to kontener data-box-name="similar offers"
    (ze spacją; w kodzie strony 1 raz) - obejmuje tytuł i karuzelę. */

@@ -98,6 +98,7 @@ const DEFAULT_LISTING_SECTIONS = {
     aiSuggestions: true,
     relatedLinks: true,
     similarPhrases: true,
+    precartOffers: true,
     advice: true,
     dealsZone: true,
     top10: true
@@ -111,6 +112,7 @@ const LISTING_SECTION_CHECKBOXES = {
     aiSuggestions: "setting-listing-ai-suggestions",
     relatedLinks: "setting-listing-related-links",
     similarPhrases: "setting-listing-similar-phrases",
+    precartOffers: "setting-listing-precart-offers",
     advice: "setting-listing-advice",
     dealsZone: "setting-listing-deals-zone",
     top10: "setting-listing-top10"
@@ -119,13 +121,15 @@ const LISTING_SECTION_CHECKBOXES = {
 const DEFAULT_PRODUCT_OFFERS_SECTIONS = {
     sponsoredBrand: true,
     officialStore: true,
-    similarOffers: true
+    similarOffers: true,
+    precartOffers: true
 };
 
 const PRODUCT_OFFERS_SECTION_CHECKBOXES = {
     sponsoredBrand: "setting-product-offers-sponsored-brand",
     officialStore: "setting-product-offers-official-store",
-    similarOffers: "setting-product-offers-similar-offers"
+    similarOffers: "setting-product-offers-similar-offers",
+    precartOffers: "setting-product-offers-precart-offers"
 };
 
 const DEFAULT_FAVORITES_SECTIONS = {
